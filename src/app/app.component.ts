@@ -1,27 +1,67 @@
-
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { IonApp, IonSplitPane, IonMenu, IonContent, IonList, IonListHeader, IonNote, IonMenuToggle, IonItem, IonIcon, IonLabel, IonRouterOutlet, IonRouterLink } from '@ionic/angular/standalone';
-import { addIcons } from 'ionicons';
-import { mailOutline, mailSharp, paperPlaneOutline, paperPlaneSharp, heartOutline, heartSharp, archiveOutline, archiveSharp, trashOutline, trashSharp, warningOutline, warningSharp, bookmarkOutline, bookmarkSharp } from 'ionicons/icons';
+import {
+  IonApp,
+  IonSplitPane,
+  IonMenu,
+  IonContent,
+  IonList,
+  IonMenuToggle,
+  IonItem,
+  IonLabel,
+  IonRouterOutlet,
+  IonRouterLink,
+  IonIcon,
+  IonImg,
+} from '@ionic/angular/standalone';
+import { ScoreRenderedCacheService } from './services/score-rendered-cache.service';
+import { StatusBar } from '@capacitor/status-bar';
 
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
   styleUrls: ['app.component.scss'],
-  imports: [RouterLink, RouterLinkActive, IonApp, IonSplitPane, IonMenu, IonContent, IonList, IonListHeader, IonNote, IonMenuToggle, IonItem, IonIcon, IonLabel, IonRouterLink, IonRouterOutlet],
+  imports: [
+    RouterLink,
+    RouterLinkActive,
+    IonApp,
+    IonSplitPane,
+    IonMenu,
+    IonContent,
+    IonList,
+    IonMenuToggle,
+    IonItem,
+    IonLabel,
+    IonRouterLink,
+    IonRouterOutlet,
+    IonIcon,
+    IonImg,
+  ],
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
+  private ASSET_FOLDER = 'assets/icon/';
+
   public appPages = [
-    { title: 'Inbox', url: '/folder/inbox', icon: 'mail' },
-    { title: 'Outbox', url: '/folder/outbox', icon: 'paper-plane' },
-    { title: 'Favorites', url: '/folder/favorites', icon: 'heart' },
-    { title: 'Archived', url: '/folder/archived', icon: 'archive' },
-    { title: 'Trash', url: '/folder/trash', icon: 'trash' },
-    { title: 'Spam', url: '/folder/spam', icon: 'warning' },
+    {
+      title: 'Annonces',
+      url: '/score-list',
+      icon: this.ASSET_FOLDER + 'queue_music.svg',
+    },
+    {
+      title: 'Ordre des annonces',
+      url: '/score-order',
+      icon: this.ASSET_FOLDER + 'low_priority.svg',
+    },
+    {
+      title: 'Historique des annonces',
+      url: '/score-history',
+      icon: this.ASSET_FOLDER + 'history.svg',
+    },
   ];
-  public labels = ['Family', 'Friends', 'Notes', 'Work', 'Travel', 'Reminders'];
-  constructor() {
-    addIcons({ mailOutline, mailSharp, paperPlaneOutline, paperPlaneSharp, heartOutline, heartSharp, archiveOutline, archiveSharp, trashOutline, trashSharp, warningOutline, warningSharp, bookmarkOutline, bookmarkSharp });
+  constructor(private scoreRenderedCacheService: ScoreRenderedCacheService) {}
+
+  async ngOnInit(): Promise<void> {
+    StatusBar.setBackgroundColor({ color: '#fc861d' });
+    this.scoreRenderedCacheService.initCache();
   }
 }

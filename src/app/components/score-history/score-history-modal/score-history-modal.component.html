@@ -1,0 +1,18 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="cancel()"
+        ><ion-icon src="assets/icon/arrow_back.svg"></ion-icon
+      ></ion-button>
+    </ion-buttons>
+    <ion-title>Historique</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="deleteHistory()">
+        <ion-icon src="assets/icon/delete.svg" size="large"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding">
+  <app-score-history-display></app-score-history-display>
+</ion-content>

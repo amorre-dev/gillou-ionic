@@ -1,0 +1,46 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Options</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-list>
+    <!-- Tonalité Switch -->
+    <ion-item>
+      <ion-label>Tonalité</ion-label>
+      <div class="toggle-container">
+        <ion-icon></ion-icon>
+        <ion-toggle
+          (ionChange)="toggleTone($event)"
+          [checked]="tone() === 'mib'"
+        ></ion-toggle>
+        <ion-icon src="assets/icon/clarinet.svg"></ion-icon>
+      </div>
+    </ion-item>
+
+    <ion-item-divider></ion-item-divider>
+
+    <!-- Inclure Aubade Matinale -->
+    <ion-item>
+      <ion-label>Inclure Aubade Matinale</ion-label>
+      <ion-checkbox slot="end"> </ion-checkbox>
+    </ion-item>
+
+    <!-- Inclure Mitant des Camps -->
+    <ion-item>
+      <ion-label>Inclure Mitant des Camps</ion-label>
+      <ion-checkbox slot="end"> </ion-checkbox>
+    </ion-item>
+
+    <ion-item-divider></ion-item-divider>
+
+    <!-- Réinitialiser Ordre -->
+    <ion-item>
+      <ion-label>Réinitialiser ordre</ion-label>
+      <ion-button slot="end">
+        <ion-icon src="assets/icon/restart.svg" size="large"></ion-icon>
+      </ion-button>
+    </ion-item>
+  </ion-list>
+</ion-content>

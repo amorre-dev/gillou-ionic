@@ -1,0 +1,86 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Annonces {{ tone() === 'sib' ? 'Si♭' : 'Mi♭' }}</ion-title>
+    <ion-buttons slot="end">
+      @if (isToggleButtonOk()) {
+      <div class="toggle-container">
+        <ion-icon
+          class="icon-left {{ getIconClass(tone() === 'sib') }}"
+          src="assets/icon/trumpet.svg"
+          size="large"
+        ></ion-icon>
+        <ion-toggle
+          (ionChange)="toggleTone($event)"
+          [checked]="tone() === 'mib'"
+        ></ion-toggle>
+        <ion-icon
+          class="icon-right {{ getIconClass(tone() === 'mib') }}"
+          src="assets/icon/clarinet.svg"
+          size="large"
+        ></ion-icon>
+      </div>
+      } @else { @if (tone() === 'sib') {
+      <ion-button (click)="switchTone('mib')">
+        <ion-icon src="assets/icon/trumpet.svg" size="large"></ion-icon>
+      </ion-button>
+      } @else {
+      <ion-button (click)="switchTone('sib')">
+        <ion-icon src="assets/icon/clarinet.svg" size="large"></ion-icon>
+      </ion-button>
+      } }
+      <ion-button (click)="openModal()">
+        <ion-icon src="assets/icon/history.svg" size="large"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-list>
+    @for (score of scores(); track $index) {
+    <div>
+      <ion-item lines="none" style="padding-left: 10px; padding-right: 10px">
+        <ion-label>{{score.number}} - {{score.title}}</ion-label>
+        <ion-button
+          slot="end"
+          shape="round"
+          color="secondary"
+          (click)="removeScoreFromHistory(score.id)"
+        >
+          <ion-icon
+            slot="icon-only"
+            name="remove"
+            class="in-button-icon"
+          ></ion-icon>
+        </ion-button>
+        <ion-badge
+          slot="end"
+          [style.background-color]="getBadgeBackgroundColor(getHistoryOccurrences(score.id))"
+          [style.color]="getBadgeTextColor(getHistoryOccurrences(score.id), score.id)"
+          class="custom-badge"
+        >
+          {{ getHistoryOccurrences(score.id) }}
+        </ion-badge>
+        <ion-button
+          slot="end"
+          shape="round"
+          color="secondary"
+          (click)="addScoreToHistory(score.id, score.title, score.number)"
+        >
+          <ion-icon
+            slot="icon-only"
+            name="add"
+            class="in-button-icon"
+          ></ion-icon>
+        </ion-button>
+      </ion-item>
+      <ion-item>
+        <app-music-display [score]="score"></app-music-display>
+      </ion-item>
+    </div>
+    }
+  </ion-list>
+</ion-content>

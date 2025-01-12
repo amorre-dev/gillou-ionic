@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">gillou-ionic</string>
+    <string name="title_activity_main">gillou-ionic</string>
+    <string name="package_name">am.e.dev.gillou</string>
+    <string name="custom_url_scheme">am.e.dev.gillou</string>
+</resources>

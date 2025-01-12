@@ -1,0 +1,17 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Historique des annonces</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="deleteHistory()">
+        <ion-icon src="assets/icon/delete.svg" size="large"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <app-score-history-display></app-score-history-display>
+</ion-content>

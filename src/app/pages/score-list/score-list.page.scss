@@ -1,0 +1,68 @@
+/* Remove padding and margin for the ion-list */
+ion-list {
+    padding: 0;
+    margin: 0;
+}
+
+/* Remove padding for the ion-item */
+ion-item {
+    --padding-start: 0; /* Remove padding at the start */
+    --inner-padding-end: 0; /* Remove inner padding at the end */
+    --inner-padding-top: 0; /* Remove top padding */
+    --inner-padding-bottom: 0; /* Remove bottom padding */
+    --min-height: 0; /* Adjust minimum height if necessary */
+}
+
+/* Ensure app-music-display spans full width */
+ion-item app-music-display {
+    width: 100%; /* Take full width of the container */
+}
+  
+.in-button-icon {
+    color: var(--ion-text-color);
+    font-weight: bold; /* Optional: make the title bold for emphasis */
+}
+
+.custom-badge {
+    font-size: 1rem;          /* Bigger text */
+    border-radius: 1.5rem;     /* Extra rounding */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); /* Subtle shadow */
+    //padding: 0.25rem 0.75rem;  /* Control spacing inside the badge */
+    min-width: 3rem;           /* Just to ensure a nice shape even if text is small */
+    min-height: 1.7rem;
+    display: inline-flex;       /* Let the badge shape adapt to content */
+    align-items: center;
+    justify-content: center;
+}
+.toggle-container {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Spacing between icons and toggle */
+  }
+  
+.icon-left,
+.icon-right {
+    display: flex;
+    align-items: center;
+    transition: transform 0.3s ease; /* Smooth size transition */
+}
+
+.icon-left.large,
+.icon-right.large {
+    transform: scale(1); /* Enlarge icon */
+}
+
+.icon-left.medium,
+.icon-right.medium {
+    transform: scale(0.6); /* Default size */
+}
+
+ion-toggle {
+    --track-background: var(--ion-color-secondary);
+    --track-background-checked: var(--ion-color-secondary);
+
+    --handle-background: #630000;
+    --handle-background-checked: #006e5e;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+  
