@@ -57,6 +57,11 @@ export class AppComponent implements OnInit {
       url: '/score-history',
       icon: this.ASSET_FOLDER + 'history.svg',
     },
+    {
+      title: 'Options',
+      url: '/settings',
+      icon: this.ASSET_FOLDER + 'settings.svg',
+    },
   ];
   constructor(private scoreRenderedCacheService: ScoreRenderedCacheService) {}
 

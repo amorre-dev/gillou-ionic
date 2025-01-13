@@ -37,6 +37,7 @@ import { getScoreById } from 'src/app/data/identifiers/score-identifiers';
 })
 export class ReorderScoresPage {
   order = this.scoreService.getOrder();
+  isOrderOriginal = this.scoreService.isOrderOriginal;
 
   constructor(private scoreService: ScoreService) {}
 

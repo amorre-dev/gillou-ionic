@@ -30,11 +30,12 @@ export class ThemeService {
   }
 
   // Listen for the toggle check/uncheck to toggle the dark theme
-  toggleChange(event: CustomEvent) {
-    this.toggleDarkTheme(event.detail.checked);
+  toggleTheme() {
+    const wasDark = this.isDarkMode();
+    this.updateTheme(!wasDark);
   }
 
   private toggleDarkTheme(shouldAdd: boolean) {
-    document.body.classList.toggle('dark', shouldAdd);
+    document.documentElement.classList.toggle('ion-palette-dark', shouldAdd);
   }
 }

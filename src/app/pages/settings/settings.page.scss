@@ -1,0 +1,23 @@
+.toggle-container {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Spacing between icons and toggle */
+}
+
+ion-toggle {
+  --track-background: var(--ion-color-secondary);
+  --track-background-checked: var(--ion-color-secondary);
+
+  --handle-background: #630000;
+  --handle-background-checked: #006e5e;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.ion-toggle-theme {
+  --track-background: var(--ion-color-secondary);
+  --track-background-checked: var(--ion-color-secondary);
+
+  --handle-background: var(--ion-color-dark);
+  --handle-background-checked: var(--ion-color-light);
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}

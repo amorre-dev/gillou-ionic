@@ -9,13 +9,20 @@ import {
   IonList,
   IonItem,
   IonLabel,
-  IonSegmentButton,
   IonIcon,
   IonToggle,
   IonItemDivider,
   IonCheckbox,
   IonButton,
+  IonButtons,
+  IonMenuButton,
 } from '@ionic/angular/standalone';
+import { ScoreService } from 'src/app/services/score.service';
+import {
+  AUBADE_MATINALE_ID,
+  MITANT_DES_CAMPS_ID,
+} from 'src/app/data/identifiers/score-identifiers';
+import { ThemeService } from 'src/app/services/theme.service';
 
 @Component({
   selector: 'app-settings',
@@ -28,7 +35,6 @@ import {
     IonItemDivider,
     IonToggle,
     IonIcon,
-    IonSegmentButton,
     IonLabel,
     IonItem,
     IonList,
@@ -38,10 +44,50 @@ import {
     IonToolbar,
     CommonModule,
     FormsModule,
+    IonButtons,
+    IonMenuButton,
   ],
 })
-export class SettingsPage implements OnInit {
-  constructor() {}
+export class SettingsPage {
+  tone = this.scoreService.tone;
+  isOrderOriginal = this.scoreService.isOrderOriginal;
+  isDarkMode = this.themeService.isDarkMode;
 
-  ngOnInit() {}
+  constructor(
+    private scoreService: ScoreService,
+    private themeService: ThemeService
+  ) {}
+
+  switchTone(tone: 'sib' | 'mib') {
+    this.scoreService.setTone(tone); // Update the tone
+  }
+
+  toggleTone(event: any) {
+    const newTone = event.detail.checked ? 'mib' : 'sib';
+    this.switchTone(newTone);
+  }
+
+  isAubadeRemoved(): boolean {
+    return this.scoreService.isScoreRemoved(AUBADE_MATINALE_ID.id);
+  }
+
+  toggleAubade() {
+    this.scoreService.toggleScore(AUBADE_MATINALE_ID.id);
+  }
+
+  isMitantDesCampsRemoved(): boolean {
+    return this.scoreService.isScoreRemoved(MITANT_DES_CAMPS_ID.id);
+  }
+
+  toggleMitantDesCamps() {
+    this.scoreService.toggleScore(MITANT_DES_CAMPS_ID.id);
+  }
+
+  resetOrder() {
+    this.scoreService.resetOrder();
+  }
+
+  toggleTheme() {
+    this.themeService.toggleTheme();
+  }
 }

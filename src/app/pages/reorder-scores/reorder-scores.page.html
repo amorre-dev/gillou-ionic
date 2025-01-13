@@ -6,9 +6,11 @@
     <ion-title>Ordre des Annonces</ion-title>
 
     <ion-buttons slot="end">
+      @if(!isOrderOriginal()){
       <ion-button (click)="resetOrder()">
         <ion-icon src="assets/icon/restart.svg" size="large"></ion-icon>
       </ion-button>
+      }
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
