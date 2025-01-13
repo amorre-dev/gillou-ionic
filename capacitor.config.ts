@@ -2,7 +2,7 @@ import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: 'am.e.dev.gillou',
-  appName: 'gillou-ionic',
+  appName: 'Gillou',
   webDir: 'www/browser',
 };
 
