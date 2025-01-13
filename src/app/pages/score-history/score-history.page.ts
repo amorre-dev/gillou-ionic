@@ -30,6 +30,8 @@ import { ScoreHistoryService } from 'src/app/services/score-history.service';
   ],
 })
 export class ScoreHistoryPage {
+  isHistoryEmpty = this.scoreHistoryService.isHistoryEmpty;
+
   constructor(private scoreHistoryService: ScoreHistoryService) {}
 
   deleteHistory() {

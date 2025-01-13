@@ -68,7 +68,9 @@ ion-menu.ios ion-list {
   padding: 20px 0;
   --padding-start: 10px;
   --padding-end: 10px;
-  background: var(--ion-color-primary); /* Ensure list background matches menu */
+  background: var(
+    --ion-color-primary
+  ); /* Ensure list background matches menu */
 }
 
 ion-menu.md ion-item,
@@ -76,5 +78,18 @@ ion-menu.ios ion-item {
   --padding-start: 10px;
   --padding-end: 10px;
   border-radius: 4px; /* Slightly rounded corners for a modern look */
-  --background: var(--ion-color-primary); /* Ensure list background matches menu */
+  --background: var(
+    --ion-color-primary
+  ); /* Ensure list background matches menu */
+}
+
+.menu-footer {
+  text-align: center; /* Center-aligns the text */
+}
+
+.footer-text {
+  background: var(--ion-color-primary);
+  font-size: 0.9rem; /* Slightly smaller font for the footer */
+  color: var(--ion-color-medium); /* Muted text color */
+  font-weight: 500; /* Medium weight for better visibility */
 }

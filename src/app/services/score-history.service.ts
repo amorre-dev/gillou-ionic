@@ -8,6 +8,7 @@ import { v4 as uuidv4 } from 'uuid';
 export class ScoreHistoryService {
   private readonly STORAGE_KEY = 'scoreHistory';
   scoreHistory = signal<ScoreHistory[]>(this.loadFromStorage());
+  isHistoryEmpty = computed(() => this.scoreHistory().length === 0);
 
   constructor() {}
 

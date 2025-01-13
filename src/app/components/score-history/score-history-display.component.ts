@@ -14,4 +14,8 @@ export class ScoreHistoryDisplayComponent {
   scoreHistory = this.scoreHistoryService.scoreHistory;
 
   constructor(private scoreHistoryService: ScoreHistoryService) {}
+
+  removeById(historyId: string) {
+    this.scoreHistoryService.removeFromHistory(historyId);
+  }
 }

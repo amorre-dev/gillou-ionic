@@ -4,11 +4,13 @@
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
     <ion-title>Historique des annonces</ion-title>
+    @if(!isHistoryEmpty()){
     <ion-buttons slot="end">
       <ion-button (click)="deleteHistory()">
         <ion-icon src="assets/icon/delete.svg" size="large"></ion-icon>
       </ion-button>
     </ion-buttons>
+    }
   </ion-toolbar>
 </ion-header>
 

@@ -1,6 +1,4 @@
 import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-
 import {
   IonButton,
   IonButtons,
@@ -19,7 +17,6 @@ import { ScoreHistoryService } from 'src/app/services/score-history.service';
   templateUrl: './score-history-modal.component.html',
   styleUrls: ['./score-history-modal.component.scss'],
   imports: [
-    FormsModule,
     IonButton,
     IonButtons,
     IonContent,
@@ -31,6 +28,8 @@ import { ScoreHistoryService } from 'src/app/services/score-history.service';
   ],
 })
 export class ScoreHistoryModalComponent {
+  isHistoryEmpty = this.scoreHistoryService.isHistoryEmpty;
+
   constructor(
     private modalCtrl: ModalController,
     private scoreHistoryService: ScoreHistoryService

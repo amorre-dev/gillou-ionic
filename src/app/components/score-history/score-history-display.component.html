@@ -6,6 +6,12 @@
       <h2>{{ historyItem.scoreNumber }} - {{ historyItem.scoreTitle }}</h2>
       <p>{{ historyItem.date | date : "dd/MM/yyyy - HH:mm:ss" }}</p>
     </ion-label>
+    <ion-icon
+      src="assets/icon/delete.svg"
+      color="primary"
+      slot="end"
+      (click)="removeById(historyItem.historyId)"
+    ></ion-icon>
   </ion-item>
   }
 </ion-list>

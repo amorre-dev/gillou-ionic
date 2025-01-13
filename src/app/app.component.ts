@@ -13,6 +13,7 @@ import {
   IonRouterLink,
   IonIcon,
   IonImg,
+  IonFooter,
 } from '@ionic/angular/standalone';
 import { ScoreRenderedCacheService } from './services/score-rendered-cache.service';
 import { StatusBar } from '@capacitor/status-bar';
@@ -36,6 +37,7 @@ import { StatusBar } from '@capacitor/status-bar';
     IonRouterOutlet,
     IonIcon,
     IonImg,
+    IonFooter,
   ],
 })
 export class AppComponent implements OnInit {
