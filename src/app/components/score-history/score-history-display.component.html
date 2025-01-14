@@ -1,6 +1,6 @@
 @if(scoreHistory().length > 0) {
 <ion-list lines="full">
-  @for (historyItem of scoreHistory(); track $index) {
+  @for (historyItem of scoreHistory().reverse(); track $index) {
   <ion-item>
     <ion-label>
       <h2>{{ historyItem.scoreNumber }} - {{ historyItem.scoreTitle }}</h2>
