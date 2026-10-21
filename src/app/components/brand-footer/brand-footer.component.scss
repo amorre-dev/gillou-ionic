@@ -1,0 +1,50 @@
+:host {
+  display: block;
+}
+
+/* Discreet signature: muted ink that follows the theme, brand orange for the accents */
+.brand-footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px 10px;
+  color: var(--gillou-ink-muted);
+  text-decoration: none;
+  opacity: 0.9;
+}
+
+.brand-footer:active {
+  opacity: 1;
+}
+
+.ink {
+  fill: currentColor;
+}
+
+.accent {
+  fill: var(--gillou-brand);
+}
+
+.personas {
+  width: 150px;
+  height: 24px;
+}
+
+.made-by {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.made-by__label {
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.lockup {
+  width: 68px;
+  height: 18px;
+  color: var(--gillou-ink);
+}

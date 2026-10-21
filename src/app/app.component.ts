@@ -21,6 +21,7 @@ import { ScoreRenderedCacheService } from './services/score-rendered-cache.servi
 import { ThemeService } from './services/theme.service';
 import { EasterEggService } from './services/easter-egg.service';
 import { KeepAwakeService } from './services/keep-awake.service';
+import { BrandFooterComponent } from './components/brand-footer/brand-footer.component';
 
 const ASSET_FOLDER = 'assets/icon/';
 /** Keep in sync with --ion-color-primary in src/theme/variables.scss */
@@ -46,6 +47,7 @@ const PRIMARY_COLOR = '#e9a262';
     IonIcon,
     IonImg,
     IonFooter,
+    BrandFooterComponent,
   ],
 })
 export class AppComponent implements OnInit {

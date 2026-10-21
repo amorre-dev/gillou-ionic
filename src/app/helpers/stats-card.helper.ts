@@ -73,7 +73,7 @@ export async function renderStatsCard(stats: CarnivalStats, logoUrl = 'assets/ic
   }
   ctx.fillStyle = C.muted;
   ctx.font = `700 32px ${FONT}`;
-  ctx.fillText('Fait avec Gillou · annonces du carnaval', logo ? 184 : 72, footerY + 12);
+  ctx.fillText('Fait avec Gillou · par am-e.dev', logo ? 184 : 72, footerY + 12);
 
   return new Promise((resolve, reject) =>
     canvas.toBlob((blob) => (blob ? resolve(blob) : reject(new Error('PNG export failed'))), 'image/png')
