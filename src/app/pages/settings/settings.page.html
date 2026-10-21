@@ -84,6 +84,34 @@
     }
   </ion-list>
 
+  @if (canPlay) {
+  <h3 class="section-title">Écoute</h3>
+  <ion-list class="gillou-list" lines="none">
+    <ion-item>
+      <ion-icon slot="start" src="assets/icon/volume.svg" aria-hidden="true"></ion-icon>
+      <ion-label>
+        Tempo
+        <p>{{ tempo() }} à la noire</p>
+      </ion-label>
+    </ion-item>
+    <ion-item class="tempo-item">
+      <ion-range
+        [min]="tempoMin"
+        [max]="tempoMax"
+        [step]="5"
+        [snaps]="true"
+        [ticks]="false"
+        [value]="tempo()"
+        (ionChange)="onTempo($event)"
+        aria-label="Tempo"
+      >
+        <span slot="start" class="tempo-edge">Lent</span>
+        <span slot="end" class="tempo-edge">Rapide</span>
+      </ion-range>
+    </ion-item>
+  </ion-list>
+  }
+
   <h3 class="section-title">Sauvegarde</h3>
   <ion-list class="gillou-list" lines="inset">
     <ion-item button="true" detail="false" (click)="exportBackup()">

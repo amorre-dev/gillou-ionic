@@ -7,3 +7,25 @@ ion-button.tonal-button[disabled] {
 .bottom-space {
   height: 28px;
 }
+
+.tempo-item {
+  --padding-start: 12px;
+  --inner-padding-end: 12px;
+}
+
+.tempo-item ion-range {
+  --bar-background: var(--gillou-outline);
+  --bar-background-active: var(--gillou-brand);
+  --knob-background: var(--gillou-brand);
+  --knob-size: 24px;
+  --bar-height: 6px;
+  --bar-border-radius: 3px;
+  padding-top: 4px;
+  padding-bottom: 10px;
+}
+
+.tempo-edge {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--gillou-ink-muted);
+}

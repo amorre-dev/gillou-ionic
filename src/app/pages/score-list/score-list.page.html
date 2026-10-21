@@ -26,6 +26,17 @@
           <p class="score-card__meta">{{ getScoreMeta(score.id) }}</p>
         </div>
         <div class="score-card__actions">
+          @if (canPlay) {
+          <ion-button
+            class="tonal-button play-button"
+            [class.is-playing]="playingScoreId() === score.id"
+            shape="round"
+            (click)="togglePlay(score)"
+            [attr.aria-label]="playingScoreId() === score.id ? 'Arrêter' : 'Écouter'"
+          >
+            <ion-icon slot="icon-only" [src]="playingScoreId() === score.id ? 'assets/icon/stop.svg' : 'assets/icon/play.svg'"></ion-icon>
+          </ion-button>
+          }
           <ion-button
             class="tonal-button"
             shape="round"

@@ -14,6 +14,7 @@ export const PERSISTED_KEYS = [
   'scoreTone',
   'theme',
   'keepAwake',
+  'tempo',
 ] as const;
 
 const memory = new Map<string, string>();

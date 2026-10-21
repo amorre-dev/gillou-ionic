@@ -35,9 +35,7 @@
   font-size: 0.76rem;
   font-weight: 600;
   color: var(--gillou-ink-muted);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  line-height: 1.25;
 }
 
 .score-card__title {
@@ -80,4 +78,57 @@
 app-music-display {
   display: block;
   margin-top: 2px;
+}
+
+/* Listen button: brand-coloured while playing */
+.play-button {
+  margin-right: 4px;
+}
+
+.play-button ion-icon {
+  font-size: 18px;
+}
+
+.play-button.is-playing {
+  --background: var(--gillou-brand);
+  --color: var(--gillou-on-accent);
+}
+
+/* Narrow phones: smaller controls so titles keep their room next to four actions */
+@media (max-width: 599px) {
+  .score-card__actions {
+    gap: 4px;
+  }
+
+  .score-card .tonal-button {
+    width: 34px;
+    height: 34px;
+  }
+
+  .score-card .tonal-button ion-icon {
+    font-size: 20px;
+  }
+
+  .play-button {
+    margin-right: 2px;
+  }
+
+  .play-button ion-icon {
+    font-size: 16px;
+  }
+
+  .count-badge {
+    min-width: 2.4rem;
+    height: 1.85rem;
+    padding: 0 0.55rem;
+    font-size: 0.95rem;
+  }
+
+  .score-card__title {
+    font-size: 0.96rem;
+  }
+
+  .score-card__meta {
+    margin-left: 38px;
+  }
 }

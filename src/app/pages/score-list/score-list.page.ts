@@ -22,6 +22,8 @@ import { BADGE_COLORS, BADGE_MAX } from 'src/theme/badge.theme';
 import { ScoreHistoryModalComponent } from 'src/app/components/score-history/score-history-modal/score-history-modal.component';
 import { ScoreHistoryService } from 'src/app/services/score-history.service';
 import { HapticsService } from 'src/app/services/haptics.service';
+import { MelodyPlayerService } from 'src/app/services/melody-player.service';
+import { Score } from 'src/app/types/score.type';
 import { relativeTimeFr } from 'src/app/helpers/relative-time.helper';
 
 /** Below this width (Pixel 8 viewport) the toolbar tone chooser shows icons only. */
@@ -52,9 +54,12 @@ export class ScoreListPage {
   private readonly modalCtrl = inject(ModalController);
   private readonly scoreHistoryService = inject(ScoreHistoryService);
   private readonly haptics = inject(HapticsService);
+  private readonly player = inject(MelodyPlayerService);
 
   readonly scores = this.scoreService.scores;
   readonly pageWidth = signal(this.platform.width());
+  readonly playingScoreId = this.player.playingScoreId;
+  readonly canPlay = this.player.isSupported;
 
   constructor() {
     addIcons({ add, remove });
@@ -88,6 +93,10 @@ export class ScoreListPage {
   /** Today's count: what the badge shows. */
   getTodayOccurrences(scoreId: string): number {
     return this.scoreHistoryService.getTodayOccurrences(scoreId);
+  }
+
+  togglePlay(score: Score) {
+    this.player.toggle(score);
   }
 
   getTodayLabel(scoreId: string): string {
