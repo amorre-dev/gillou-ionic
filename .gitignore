@@ -71,3 +71,9 @@ Thumbs.db
 
 # Android release bundles
 *.aab
+
+# Android signing material (keep out of git)
+android/key.properties
+android/keystore/
+*.jks
+*.keystore

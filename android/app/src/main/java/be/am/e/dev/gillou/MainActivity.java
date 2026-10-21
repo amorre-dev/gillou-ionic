@@ -1,4 +1,4 @@
-package am.e.dev.gillou;
+package be.am.e.dev.gillou;
 
 import com.getcapacitor.BridgeActivity;
 

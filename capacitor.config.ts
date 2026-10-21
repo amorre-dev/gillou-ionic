@@ -1,7 +1,7 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'am.e.dev.gillou',
+  appId: 'be.am.e.dev.gillou',
   appName: 'Gillou',
   webDir: 'www/browser',
   plugins: {

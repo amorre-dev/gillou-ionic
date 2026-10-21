@@ -2,6 +2,6 @@
 <resources>
     <string name="app_name">Gillou</string>
     <string name="title_activity_main">Gillou</string>
-    <string name="package_name">am.e.dev.gillou</string>
-    <string name="custom_url_scheme">am.e.dev.gillou</string>
+    <string name="package_name">be.am.e.dev.gillou</string>
+    <string name="custom_url_scheme">be.am.e.dev.gillou</string>
 </resources>
