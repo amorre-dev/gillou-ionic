@@ -3,13 +3,14 @@ import { provideRouter } from '@angular/router';
 import { provideIonicAngular } from '@ionic/angular';
 import { ScoreListPage } from './score-list.page';
 import { BADGE_COLORS, BADGE_MAX } from 'src/theme/badge.theme';
+import { resetPersistenceForTests } from 'src/app/helpers/storage.helper';
 
 describe('ScoreListPage', () => {
   let component: ScoreListPage;
   let fixture: ComponentFixture<ScoreListPage>;
 
   beforeEach(async () => {
-    localStorage.clear();
+    resetPersistenceForTests();
     await TestBed.configureTestingModule({
       imports: [ScoreListPage],
       providers: [provideRouter([]), provideIonicAngular()],
@@ -28,7 +29,7 @@ describe('ScoreListPage badges', () => {
   let page: ScoreListPage;
 
   beforeEach(async () => {
-    localStorage.clear();
+    resetPersistenceForTests();
     await TestBed.configureTestingModule({
       imports: [ScoreListPage],
       providers: [provideRouter([]), provideIonicAngular()],

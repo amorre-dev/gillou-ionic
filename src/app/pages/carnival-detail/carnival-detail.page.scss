@@ -90,3 +90,55 @@ app-score-history-display {
   font-size: 0.92rem;
   color: var(--gillou-ink-muted);
 }
+
+.numbers-card {
+  margin: 0 var(--gillou-card-margin);
+  padding: 18px 20px 8px;
+  border: 1px solid var(--gillou-outline);
+  border-radius: var(--gillou-radius-lg);
+  background: var(--gillou-surface);
+  box-shadow: var(--gillou-shadow);
+  color: var(--gillou-ink);
+}
+
+.numbers-card__total {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.numbers-card__big {
+  font-size: 2.6rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.numbers-card__label {
+  font-weight: 700;
+  color: var(--gillou-ink-muted);
+}
+
+.numbers-card__row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 6px 0;
+  font-size: 0.95rem;
+}
+
+.numbers-card__row span {
+  color: var(--gillou-ink-muted);
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.numbers-card__row strong {
+  text-align: right;
+  font-weight: 800;
+}
+
+.numbers-card__share {
+  margin: 10px -8px 0;
+  --color: var(--gillou-link);
+}

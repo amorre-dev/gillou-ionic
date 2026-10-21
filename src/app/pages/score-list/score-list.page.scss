@@ -23,6 +23,23 @@
   padding: 0 4px 0 6px;
 }
 
+.score-card__heading {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.score-card__meta {
+  margin: 0 0 0 40px;
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: var(--gillou-ink-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .score-card__title {
   display: flex;
   align-items: center;

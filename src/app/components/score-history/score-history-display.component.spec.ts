@@ -2,13 +2,14 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideIonicAngular } from '@ionic/angular';
 import { ScoreHistoryDisplayComponent } from './score-history-display.component';
 import { ScoreHistoryService } from 'src/app/services/score-history.service';
+import { resetPersistenceForTests } from 'src/app/helpers/storage.helper';
 
 describe('ScoreHistoryDisplayComponent', () => {
   let fixture: ComponentFixture<ScoreHistoryDisplayComponent>;
   let history: ScoreHistoryService;
 
   beforeEach(async () => {
-    localStorage.clear();
+    resetPersistenceForTests();
     await TestBed.configureTestingModule({
       imports: [ScoreHistoryDisplayComponent],
       providers: [provideIonicAngular()],

@@ -6,6 +6,9 @@
     <ion-title>Historique</ion-title>
     @if (!isHistoryEmpty()) {
     <ion-buttons slot="end">
+      <ion-button (click)="showStats()" aria-label="Mon carnaval en chiffres">
+        <ion-icon slot="icon-only" src="assets/icon/stats.svg"></ion-icon>
+      </ion-button>
       <ion-button (click)="saveAsCarnival()" aria-label="Enregistrer comme carnaval">
         <ion-icon slot="icon-only" src="assets/icon/save.svg"></ion-icon>
       </ion-button>

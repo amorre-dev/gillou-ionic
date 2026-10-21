@@ -6,6 +6,9 @@
     <ion-title>{{ carnival()?.name ?? 'Carnaval' }}</ion-title>
     @if (carnival()) {
     <ion-buttons slot="end">
+      <ion-button (click)="showStats()" aria-label="Partager en chiffres">
+        <ion-icon slot="icon-only" src="assets/icon/share.svg"></ion-icon>
+      </ion-button>
       <ion-button (click)="edit()" aria-label="Modifier">
         <ion-icon slot="icon-only" src="assets/icon/edit.svg"></ion-icon>
       </ion-button>
@@ -44,6 +47,26 @@
     }
     <p class="info-card__saved">Enregistré le {{ c.savedAt | date : 'd MMMM yyyy à HH:mm' }}</p>
   </section>
+
+  @if (ranks(); as r) {
+  <h3 class="section-title">En chiffres</h3>
+  <section class="numbers-card">
+    <div class="numbers-card__total">
+      <span class="numbers-card__big">{{ r.total }}</span>
+      <span class="numbers-card__label">annonce{{ r.total > 1 ? 's' : '' }} jouée{{ r.total > 1 ? 's' : '' }}</span>
+    </div>
+    @if (r.most) {
+    <p class="numbers-card__row"><span>Le plus joué</span><strong>{{ r.most.names.join(', ') }} · {{ r.most.count }}×</strong></p>
+    }
+    @if (r.least) {
+    <p class="numbers-card__row"><span>Le moins joué</span><strong>{{ r.least.names.join(', ') }} · {{ r.least.count }}×</strong></p>
+    }
+    <ion-button class="numbers-card__share" expand="block" fill="clear" (click)="showStats()">
+      <ion-icon slot="start" src="assets/icon/share.svg"></ion-icon>
+      Partager mon carnaval en chiffres
+    </ion-button>
+  </section>
+  }
 
   <h3 class="section-title">Résumé · {{ c.entries.length }} annonce{{ c.entries.length > 1 ? 's' : '' }}</h3>
   <ion-list class="gillou-list summary-list" lines="inset">

@@ -19,6 +19,7 @@ import {
 import { CarnivalArchiveService } from 'src/app/services/carnival-archive.service';
 import { HistoryActionsService } from 'src/app/services/history-actions.service';
 import { carnivalDateRange, countByScore } from 'src/app/helpers/carnival-day.helper';
+import { rankScores } from 'src/app/helpers/carnival-stats.helper';
 import { ScoreHistoryDisplayComponent } from 'src/app/components/score-history/score-history-display.component';
 
 @Component({
@@ -61,6 +62,17 @@ export class CarnivalDetailPage {
     const c = this.carnival();
     return c ? countByScore(c.entries) : [];
   });
+  readonly ranks = computed(() => {
+    const c = this.carnival();
+    return c ? rankScores(c.entries) : null;
+  });
+
+  async showStats() {
+    const carnival = this.carnival();
+    if (carnival) {
+      await this.actions.showStats(carnival.entries, carnival.name, carnival.location);
+    }
+  }
 
   async edit() {
     const carnival = this.carnival();

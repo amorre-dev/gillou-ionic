@@ -18,10 +18,13 @@
     @for (score of scores(); track score.id) {
     <article class="score-card">
       <div class="score-card__header">
-        <h2 class="score-card__title">
-          <span class="number-chip">{{ score.number }}</span>
-          <span class="score-card__name">{{ score.title }}</span>
-        </h2>
+        <div class="score-card__heading">
+          <h2 class="score-card__title">
+            <span class="number-chip">{{ score.number }}</span>
+            <span class="score-card__name">{{ score.title }}</span>
+          </h2>
+          <p class="score-card__meta">{{ getScoreMeta(score.id) }}</p>
+        </div>
         <div class="score-card__actions">
           <ion-button
             class="tonal-button"
@@ -33,10 +36,11 @@
           </ion-button>
           <ion-badge
             class="count-badge"
-            [style.background-color]="getBadgeBackgroundColor(getHistoryOccurrences(score.id))"
-            [style.color]="getBadgeTextColor(getHistoryOccurrences(score.id))"
+            [style.background-color]="getBadgeBackgroundColor(getTodayOccurrences(score.id))"
+            [style.color]="getBadgeTextColor(getTodayOccurrences(score.id))"
+            [attr.aria-label]="getTodayLabel(score.id)"
           >
-            {{ getHistoryOccurrences(score.id) }}
+            {{ getTodayOccurrences(score.id) }}
           </ion-badge>
           <ion-button
             class="tonal-button"

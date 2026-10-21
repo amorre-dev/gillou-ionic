@@ -40,6 +40,10 @@ export class ScoreHistoryPage {
     return this.actions.saveCurrentHistory();
   }
 
+  showStats() {
+    return this.actions.showStats(this.scoreHistoryService.scoreHistory());
+  }
+
   deleteHistory() {
     return this.actions.confirmClearHistory();
   }

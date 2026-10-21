@@ -2,13 +2,14 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { provideIonicAngular } from '@ionic/angular';
 import { CarnivalDetailPage } from './carnival-detail.page';
+import { resetPersistenceForTests } from 'src/app/helpers/storage.helper';
 
 describe('CarnivalDetailPage', () => {
   let component: CarnivalDetailPage;
   let fixture: ComponentFixture<CarnivalDetailPage>;
 
   beforeEach(async () => {
-    localStorage.clear();
+    resetPersistenceForTests();
     await TestBed.configureTestingModule({
       imports: [CarnivalDetailPage],
       providers: [provideRouter([]), provideIonicAngular()],

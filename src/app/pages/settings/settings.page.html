@@ -54,8 +54,8 @@
   </ion-list>
 
   <h3 class="section-title">Affichage</h3>
-  <ion-list class="gillou-list" lines="none">
-    <ion-item>
+  <ion-list class="gillou-list" lines="inset">
+    <ion-item [lines]="keepAwakeSupported ? 'inset' : 'none'">
       <ion-label>Thème</ion-label>
       <div class="toggle-container" slot="end">
         <ion-icon src="assets/icon/light_mode.svg" aria-hidden="true"></ion-icon>
@@ -67,6 +67,38 @@
         ></ion-toggle>
         <ion-icon src="assets/icon/dark_mode.svg" aria-hidden="true"></ion-icon>
       </div>
+    </ion-item>
+    @if (keepAwakeSupported) {
+    <ion-item>
+      <ion-label>
+        Garder l'écran allumé
+        <p>Tant que l'application est ouverte.</p>
+      </ion-label>
+      <ion-toggle
+        slot="end"
+        [checked]="keepAwakeEnabled()"
+        (ionChange)="toggleKeepAwake($event)"
+        aria-label="Garder l'écran allumé"
+      ></ion-toggle>
+    </ion-item>
+    }
+  </ion-list>
+
+  <h3 class="section-title">Sauvegarde</h3>
+  <ion-list class="gillou-list" lines="inset">
+    <ion-item button="true" detail="false" (click)="exportBackup()">
+      <ion-icon slot="start" src="assets/icon/download.svg" aria-hidden="true"></ion-icon>
+      <ion-label>
+        Exporter une sauvegarde
+        <p>Historique, carnavals et réglages dans un fichier à garder.</p>
+      </ion-label>
+    </ion-item>
+    <ion-item button="true" detail="false" lines="none" (click)="importBackup()">
+      <ion-icon slot="start" src="assets/icon/import.svg" aria-hidden="true"></ion-icon>
+      <ion-label>
+        Restaurer une sauvegarde
+        <p>Remplace les données actuelles par celles du fichier.</p>
+      </ion-label>
     </ion-item>
   </ion-list>
   <div class="bottom-space"></div>

@@ -3,10 +3,11 @@ import { provideRouter } from '@angular/router';
 import { provideIonicAngular } from '@ionic/angular';
 
 import { AppComponent } from './app.component';
+import { resetPersistenceForTests } from 'src/app/helpers/storage.helper';
 
 describe('AppComponent', () => {
   beforeEach(async () => {
-    localStorage.clear();
+    resetPersistenceForTests();
     await TestBed.configureTestingModule({
       imports: [AppComponent],
       providers: [provideRouter([]), provideIonicAngular()],

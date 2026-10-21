@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { ScoreHistoryService } from './score-history.service';
+import { resetPersistenceForTests, seedPersistenceForTests } from 'src/app/helpers/storage.helper';
 
 describe('ScoreHistoryService', () => {
   let service: ScoreHistoryService;
@@ -11,7 +12,7 @@ describe('ScoreHistoryService', () => {
   };
 
   beforeEach(() => {
-    localStorage.clear();
+    resetPersistenceForTests();
     service = freshService();
   });
 
@@ -71,10 +72,27 @@ describe('ScoreHistoryService', () => {
     expect(freshService().isHistoryEmpty()).toBeTrue();
   });
 
+  it("tracks today's counts and the last time each score was played", () => {
+    const yesterday = new Date(Date.now() - 36 * 3_600_000).toISOString();
+    seedPersistenceForTests(
+      'scoreHistory',
+      JSON.stringify([{ historyId: 'old', scoreId: 'doudou', scoreTitle: 'El doudou', scoreNumber: 19, date: yesterday }])
+    );
+    const s = freshService();
+    expect(s.getOccurrences('doudou')).toBe(1);
+    expect(s.getTodayOccurrences('doudou')).toBe(0);
+
+    s.addToHistory('doudou', 'El doudou', 19);
+    expect(s.getTodayOccurrences('doudou')).toBe(1);
+    expect(s.getOccurrences('doudou')).toBe(2);
+    expect(s.getLastPlayed('doudou')).toBe(s.scoreHistory()[1].date);
+    expect(s.getLastPlayed('unknown')).toBeUndefined();
+  });
+
   it('ignores corrupt stored history', () => {
-    localStorage.setItem('scoreHistory', '[{"nope": true}]');
+    seedPersistenceForTests('scoreHistory', '[{"nope": true}]');
     expect(freshService().isHistoryEmpty()).toBeTrue();
-    localStorage.setItem('scoreHistory', 'garbage');
+    seedPersistenceForTests('scoreHistory', 'garbage');
     expect(freshService().isHistoryEmpty()).toBeTrue();
   });
 });

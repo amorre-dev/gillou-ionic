@@ -3,6 +3,7 @@ import { ScoreRenderedCacheService } from './score-rendered-cache.service';
 import { ScoreService } from './score.service';
 import { SCORE_REGISTRY } from '../data/score.registery';
 import { renderScore } from '../helpers/render-score.helper';
+import { resetPersistenceForTests } from 'src/app/helpers/storage.helper';
 
 /** VexFlow gives every element a fresh auto id, so strip them before comparing two renders. */
 const withoutIds = (svg: string) => svg.replace(/ id="vf-auto\d+"/g, '');
@@ -11,7 +12,7 @@ describe('ScoreRenderedCacheService', () => {
   let service: ScoreRenderedCacheService;
 
   beforeEach(() => {
-    localStorage.clear();
+    resetPersistenceForTests();
     TestBed.configureTestingModule({});
     service = TestBed.inject(ScoreRenderedCacheService);
   });

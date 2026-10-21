@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { ThemeService } from './theme.service';
+import { resetPersistenceForTests, seedPersistenceForTests } from 'src/app/helpers/storage.helper';
 
 describe('ThemeService', () => {
   const freshService = (): ThemeService => {
@@ -9,7 +10,7 @@ describe('ThemeService', () => {
   };
 
   beforeEach(() => {
-    localStorage.clear();
+    resetPersistenceForTests();
     document.documentElement.classList.remove('ion-palette-dark');
   });
 
@@ -25,9 +26,9 @@ describe('ThemeService', () => {
   });
 
   it('honours a stored preference over the system one', () => {
-    localStorage.setItem('theme', 'dark');
+    seedPersistenceForTests('theme', 'dark');
     expect(freshService().isDarkMode()).toBeTrue();
-    localStorage.setItem('theme', 'light');
+    seedPersistenceForTests('theme', 'light');
     expect(freshService().isDarkMode()).toBeFalse();
   });
 });

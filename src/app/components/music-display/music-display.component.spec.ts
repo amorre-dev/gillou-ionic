@@ -3,6 +3,7 @@ import { provideIonicAngular } from '@ionic/angular';
 import { MusicDisplayComponent } from './music-display.component';
 import { SCORE_REGISTRY } from 'src/app/data/score.registery';
 import { ScoreHistoryService } from 'src/app/services/score-history.service';
+import { resetPersistenceForTests } from 'src/app/helpers/storage.helper';
 
 const hexToRgb = (hex: string) => {
   const [r, g, b] = [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16));
@@ -13,7 +14,7 @@ describe('MusicDisplayComponent', () => {
   let fixture: ComponentFixture<MusicDisplayComponent>;
 
   beforeEach(async () => {
-    localStorage.clear();
+    resetPersistenceForTests();
     await TestBed.configureTestingModule({
       imports: [MusicDisplayComponent],
       providers: [provideIonicAngular()],

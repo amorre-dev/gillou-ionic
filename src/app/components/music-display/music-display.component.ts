@@ -15,6 +15,7 @@ import { Gesture, GestureController, Platform } from '@ionic/angular';
 import { Score } from '../../types/score.type';
 import { ScoreRenderedCacheService } from '../../services/score-rendered-cache.service';
 import { ScoreHistoryService } from '../../services/score-history.service';
+import { HapticsService } from '../../services/haptics.service';
 import { scoreSheetWidth } from '../../helpers/layout.helper';
 
 const DOUBLE_TAP_THRESHOLD_MS = 500;
@@ -32,6 +33,7 @@ export class MusicDisplayComponent implements AfterViewInit, OnDestroy {
   private readonly scoreCacheService = inject(ScoreRenderedCacheService);
   private readonly gestureCtrl = inject(GestureController);
   private readonly historyService = inject(ScoreHistoryService);
+  private readonly haptics = inject(HapticsService);
 
   readonly score = input.required<Score>();
 
@@ -88,6 +90,7 @@ export class MusicDisplayComponent implements AfterViewInit, OnDestroy {
     if (now - this.lastTapAt <= DOUBLE_TAP_THRESHOLD_MS) {
       const score = this.score();
       this.historyService.addToHistory(score.id, score.title, score.number);
+      this.haptics.added();
       this.lastTapAt = 0;
     } else {
       this.lastTapAt = now;

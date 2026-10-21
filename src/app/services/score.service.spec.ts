@@ -2,6 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { ScoreService } from './score.service';
 import { SCORE_REGISTRY } from '../data/score.registery';
 import { AUBADE_MATINALE_ID } from '../data/identifiers/score-identifiers';
+import { resetPersistenceForTests, seedPersistenceForTests } from 'src/app/helpers/storage.helper';
 
 describe('ScoreService', () => {
   let service: ScoreService;
@@ -13,7 +14,7 @@ describe('ScoreService', () => {
   };
 
   beforeEach(() => {
-    localStorage.clear();
+    resetPersistenceForTests();
     service = freshService();
   });
 
@@ -68,7 +69,7 @@ describe('ScoreService', () => {
 
   it('drops unknown ids and appends scores missing from a stored order', () => {
     const ids = SCORE_REGISTRY.map((s) => s.id);
-    localStorage.setItem(
+    seedPersistenceForTests(
       'scoreOrder',
       JSON.stringify(['does-not-exist', ids[2], ids[0], ids[0]])
     );
@@ -79,9 +80,9 @@ describe('ScoreService', () => {
   });
 
   it('survives corrupt storage', () => {
-    localStorage.setItem('scoreOrder', '{not json');
-    localStorage.setItem('removedScores', '42');
-    localStorage.setItem('scoreTone', 'xyz');
+    seedPersistenceForTests('scoreOrder', '{not json');
+    seedPersistenceForTests('removedScores', '42');
+    seedPersistenceForTests('scoreTone', 'xyz');
     const reloaded = freshService();
     expect(reloaded.tone()).toBe('sib');
     expect(reloaded.isOrderOriginal()).toBeTrue();

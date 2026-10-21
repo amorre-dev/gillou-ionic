@@ -1,0 +1,43 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-title>En chiffres</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="cancel()" aria-label="Fermer">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  @if (multiDay()) {
+  <div class="mode-row">
+    <ion-segment mode="ios" class="mode-segment" [value]="mode()" (ionChange)="onMode($event)" aria-label="Période">
+      <ion-segment-button mode="ios" value="all"><ion-label>Tout le carnaval</ion-label></ion-segment-button>
+      <ion-segment-button mode="ios" value="days"><ion-label>Jour par jour</ion-label></ion-segment-button>
+    </ion-segment>
+  </div>
+  }
+
+  <div class="preview" [class.preview--busy]="busy()">
+    @if (previewUrl(); as url) {
+    <img [src]="url" alt="Mon carnaval en chiffres" />
+    } @else {
+    <div class="preview__placeholder">Préparation de l'image…</div>
+    }
+  </div>
+
+  <pre class="stats-text">{{ text() }}</pre>
+
+  <div class="actions">
+    <ion-button expand="block" class="primary-button" [disabled]="busy() || !previewUrl()" (click)="share()">
+      <ion-icon slot="start" src="assets/icon/share.svg"></ion-icon>
+      {{ canShare ? 'Partager' : "Télécharger l'image" }}
+    </ion-button>
+    <ion-button expand="block" class="facebook-button" [disabled]="busy() || !previewUrl()" (click)="shareToFacebook()">
+      <ion-icon slot="start" src="assets/icon/facebook.svg"></ion-icon>
+      Publier sur Facebook
+    </ion-button>
+    <p class="hint">Les réseaux sociaux gardent l'image et ignorent souvent le texte : les chiffres sont dessinés dessus.</p>
+  </div>
+</ion-content>

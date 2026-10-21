@@ -1,4 +1,4 @@
-import { LOCALE_ID, provideZoneChangeDetection } from '@angular/core';
+import { LOCALE_ID, provideAppInitializer, provideZonelessChangeDetection } from '@angular/core';
 import { registerLocaleData } from '@angular/common';
 import localeFr from '@angular/common/locales/fr';
 import { bootstrapApplication } from '@angular/platform-browser';
@@ -15,12 +15,14 @@ import {
 
 import { routes } from './app/app.routes';
 import { AppComponent } from './app/app.component';
+import { initPersistence } from './app/helpers/storage.helper';
 
 registerLocaleData(localeFr);
 
 bootstrapApplication(AppComponent, {
   providers: [
-    provideZoneChangeDetection(),
+    provideZonelessChangeDetection(),
+    provideAppInitializer(() => initPersistence()),
     { provide: LOCALE_ID, useValue: 'fr' },
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     // One layout on every platform: left-aligned titles, opaque accent header, Material controls.

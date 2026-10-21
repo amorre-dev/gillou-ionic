@@ -3,6 +3,7 @@ import { ScoreHistory } from '../types/score-history.type';
 import { v4 as uuidv4 } from 'uuid';
 import { Observable, Subject } from 'rxjs';
 import { readJson, writeJson } from '../helpers/storage.helper';
+import { carnivalDayOf } from '../helpers/carnival-day.helper';
 
 const isScoreHistoryArray = (value: unknown): value is ScoreHistory[] =>
   Array.isArray(value) &&
@@ -35,6 +36,35 @@ export class ScoreHistoryService {
   readonly added$: Observable<{ entry: ScoreHistory; before: ScoreHistory[] }> =
     this.added.asObservable();
 
+  /** Current time, refreshed every half minute, so "today" and "x min ago" stay right. */
+  readonly now = signal(Date.now());
+  /** Carnival day key of now (5 a.m. cutoff). */
+  readonly todayKey = computed(() => carnivalDayOf(new Date(this.now()).toISOString()));
+
+  /** scoreId -> number of times it was announced today. */
+  readonly todayOccurrences = computed(() => {
+    const today = this.todayKey();
+    const counts = new Map<string, number>();
+    for (const item of this.scoreHistory()) {
+      if (carnivalDayOf(item.date) === today) {
+        counts.set(item.scoreId, (counts.get(item.scoreId) ?? 0) + 1);
+      }
+    }
+    return counts;
+  });
+
+  /** scoreId -> ISO date of its most recent announcement. */
+  readonly lastPlayed = computed(() => {
+    const latest = new Map<string, string>();
+    for (const item of this.scoreHistory()) {
+      const current = latest.get(item.scoreId);
+      if (!current || item.date > current) {
+        latest.set(item.scoreId, item.date);
+      }
+    }
+    return latest;
+  });
+
   readonly occurrences = computed(() => {
     const counts = new Map<string, number>();
     for (const item of this.scoreHistory()) {
@@ -42,6 +72,18 @@ export class ScoreHistoryService {
     }
     return counts;
   });
+
+  constructor() {
+    setInterval(() => this.now.set(Date.now()), 30_000);
+  }
+
+  getTodayOccurrences(scoreId: string): number {
+    return this.todayOccurrences().get(scoreId) ?? 0;
+  }
+
+  getLastPlayed(scoreId: string): string | undefined {
+    return this.lastPlayed().get(scoreId);
+  }
 
   addToHistory(scoreId: string, scoreTitle: string, scoreNumber: number) {
     const before = this.scoreHistory();

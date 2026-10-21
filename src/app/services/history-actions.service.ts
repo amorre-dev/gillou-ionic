@@ -7,6 +7,8 @@ import {
   CarnivalSaveResult,
 } from '../components/carnival-save-modal/carnival-save-modal.component';
 import { SavedCarnival } from '../types/saved-carnival.type';
+import { ScoreHistory } from '../types/score-history.type';
+import { CarnivalStatsModalComponent } from '../components/carnival-stats-modal/carnival-stats-modal.component';
 
 /** User flows around the history: save it as a carnival, edit a carnival, clear with confirmation. */
 @Injectable({
@@ -57,6 +59,20 @@ export class HistoryActionsService {
     }
     this.archive.update(carnival.id, data.details);
     return true;
+  }
+
+  /** Shows "Mon carnaval en chiffres" for a carnival, or for the live history when no name is given. */
+  async showStats(entries: readonly ScoreHistory[], name = 'Mon carnaval', location = ''): Promise<void> {
+    if (entries.length === 0) {
+      return;
+    }
+    const modal = await this.modalCtrl.create({
+      component: CarnivalStatsModalComponent,
+      componentProps: { entries: [...entries], name, location },
+      cssClass: 'form-modal',
+    });
+    await modal.present();
+    await modal.onWillDismiss();
   }
 
   /** Asks before wiping the live history. Resolves true when it was cleared. */

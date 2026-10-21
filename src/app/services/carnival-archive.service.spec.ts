@@ -1,6 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { CarnivalArchiveService } from './carnival-archive.service';
 import { ScoreHistory } from '../types/score-history.type';
+import { resetPersistenceForTests, seedPersistenceForTests } from 'src/app/helpers/storage.helper';
 
 const entries: ScoreHistory[] = [
   { historyId: 'b', scoreId: 'classe', scoreTitle: 'La classe', scoreNumber: 12, date: '2026-02-15T11:00:00.000Z' },
@@ -14,7 +15,7 @@ describe('CarnivalArchiveService', () => {
     return TestBed.inject(CarnivalArchiveService);
   };
 
-  beforeEach(() => localStorage.clear());
+  beforeEach(() => resetPersistenceForTests());
 
   it('saves a trimmed, chronologically sorted snapshot and persists it', () => {
     const service = fresh();
@@ -44,7 +45,7 @@ describe('CarnivalArchiveService', () => {
   });
 
   it('ignores corrupt storage', () => {
-    localStorage.setItem('savedCarnivals', '[{"id": 1}]');
+    seedPersistenceForTests('savedCarnivals', '[{"id": 1}]');
     expect(fresh().isEmpty()).toBeTrue();
   });
 });

@@ -20,6 +20,7 @@ import { StatusBar, Style } from '@capacitor/status-bar';
 import { ScoreRenderedCacheService } from './services/score-rendered-cache.service';
 import { ThemeService } from './services/theme.service';
 import { EasterEggService } from './services/easter-egg.service';
+import { KeepAwakeService } from './services/keep-awake.service';
 
 const ASSET_FOLDER = 'assets/icon/';
 /** Keep in sync with --ion-color-primary in src/theme/variables.scss */
@@ -53,6 +54,8 @@ export class AppComponent implements OnInit {
   private readonly themeService = inject(ThemeService);
   /** Instantiated here so it listens from the first announcement on. */
   private readonly easterEggs = inject(EasterEggService);
+  /** Takes the screen wake lock from the start. */
+  private readonly keepAwake = inject(KeepAwakeService);
 
   readonly appPages = [
     {
@@ -85,6 +88,7 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     this.themeService.isDarkMode(); // touch so the fields are not flagged as unused
     void this.easterEggs;
+    void this.keepAwake;
     if (Capacitor.isNativePlatform()) {
       // The header is a light pastel in both themes, so the status bar always needs dark icons.
       Promise.all([

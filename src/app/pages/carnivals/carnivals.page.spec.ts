@@ -2,13 +2,14 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { provideIonicAngular } from '@ionic/angular';
 import { CarnivalsPage } from './carnivals.page';
+import { resetPersistenceForTests, seedPersistenceForTests } from 'src/app/helpers/storage.helper';
 
 describe('CarnivalsPage', () => {
   let component: CarnivalsPage;
   let fixture: ComponentFixture<CarnivalsPage>;
 
   beforeEach(async () => {
-    localStorage.clear();
+    resetPersistenceForTests();
     await TestBed.configureTestingModule({
       imports: [CarnivalsPage],
       providers: [provideRouter([]), provideIonicAngular()],
@@ -25,8 +26,8 @@ describe('CarnivalsPage', () => {
 
 describe('CarnivalsPage with saved carnivals', () => {
   it('lists saved carnivals newest first', async () => {
-    localStorage.clear();
-    localStorage.setItem(
+    resetPersistenceForTests();
+    seedPersistenceForTests(
       'savedCarnivals',
       JSON.stringify([
         { id: 'a', name: 'Premier', location: 'Binche', description: '', savedAt: '2026-02-01T10:00:00.000Z', entries: [] },

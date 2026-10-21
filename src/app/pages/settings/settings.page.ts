@@ -21,6 +21,9 @@ import {
 } from 'src/app/data/identifiers/score-identifiers';
 import { ThemeService } from 'src/app/services/theme.service';
 import { ToneSegmentComponent } from 'src/app/components/tone-segment/tone-segment.component';
+import { KeepAwakeService } from 'src/app/services/keep-awake.service';
+import { BackupService } from 'src/app/services/backup.service';
+import { ToggleCustomEvent } from '@ionic/angular';
 
 @Component({
   selector: 'app-settings',
@@ -47,9 +50,13 @@ import { ToneSegmentComponent } from 'src/app/components/tone-segment/tone-segme
 export class SettingsPage {
   private readonly scoreService = inject(ScoreService);
   private readonly themeService = inject(ThemeService);
+  private readonly keepAwake = inject(KeepAwakeService);
+  private readonly backup = inject(BackupService);
 
   readonly isOrderOriginal = this.scoreService.isOrderOriginal;
   readonly isDarkMode = this.themeService.isDarkMode;
+  readonly keepAwakeSupported = this.keepAwake.isSupported;
+  readonly keepAwakeEnabled = this.keepAwake.enabled;
 
   isAubadeRemoved(): boolean {
     return this.scoreService.isScoreRemoved(AUBADE_MATINALE_ID.id);
@@ -73,5 +80,17 @@ export class SettingsPage {
 
   toggleTheme() {
     this.themeService.toggleTheme();
+  }
+
+  toggleKeepAwake(event: ToggleCustomEvent) {
+    this.keepAwake.setEnabled(event.detail.checked);
+  }
+
+  exportBackup() {
+    return this.backup.exportBackup();
+  }
+
+  importBackup() {
+    return this.backup.importBackup();
   }
 }

@@ -2,13 +2,14 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideIonicAngular } from '@ionic/angular';
 import { ToneSegmentComponent } from './tone-segment.component';
 import { ScoreService } from 'src/app/services/score.service';
+import { resetPersistenceForTests } from 'src/app/helpers/storage.helper';
 
 describe('ToneSegmentComponent', () => {
   let fixture: ComponentFixture<ToneSegmentComponent>;
   let scoreService: ScoreService;
 
   beforeEach(async () => {
-    localStorage.clear();
+    resetPersistenceForTests();
     await TestBed.configureTestingModule({
       imports: [ToneSegmentComponent],
       providers: [provideIonicAngular()],
