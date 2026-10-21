@@ -1,41 +1,46 @@
 import { Injectable, signal } from '@angular/core';
+import { readRaw, writeRaw } from '../helpers/storage.helper';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ThemeService {
-  isDarkMode = signal(false);
+  private readonly STORAGE_KEY = 'theme';
+
+  readonly isDarkMode = signal(false);
+
+  /** True once the user chose a theme explicitly; the system preference is then ignored. */
+  private hasUserPreference = false;
 
   constructor() {
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+    const systemDark = window.matchMedia('(prefers-color-scheme: dark)');
+    const stored = readRaw(this.STORAGE_KEY);
 
-    // Set the initial theme
-    this.updateTheme(prefersDark.matches);
+    this.hasUserPreference = stored === 'dark' || stored === 'light';
+    this.applyTheme(this.hasUserPreference ? stored === 'dark' : systemDark.matches);
 
-    // Listen for changes to the prefers-color-scheme media query
-    if (prefersDark.addEventListener) {
-      prefersDark.addEventListener('change', (mediaQuery) =>
-        this.updateTheme(mediaQuery.matches)
-      );
-    } else if ('onchange' in prefersDark) {
-      // Fallback for older browsers
-      prefersDark.onchange = (mediaQuery) =>
-        this.updateTheme(mediaQuery.matches);
+    const onSystemChange = (event: MediaQueryListEvent) => {
+      if (!this.hasUserPreference) {
+        this.applyTheme(event.matches);
+      }
+    };
+    if (typeof systemDark.addEventListener === 'function') {
+      systemDark.addEventListener('change', onSystemChange);
+    } else {
+      // Safari < 14
+      systemDark.addListener(onSystemChange);
     }
   }
 
-  private updateTheme(isDark: boolean) {
-    this.isDarkMode.set(isDark); // Update the signal
-    this.toggleDarkTheme(isDark); // Toggle the theme
-  }
-
-  // Listen for the toggle check/uncheck to toggle the dark theme
   toggleTheme() {
-    const wasDark = this.isDarkMode();
-    this.updateTheme(!wasDark);
+    const isDark = !this.isDarkMode();
+    this.hasUserPreference = true;
+    writeRaw(this.STORAGE_KEY, isDark ? 'dark' : 'light');
+    this.applyTheme(isDark);
   }
 
-  private toggleDarkTheme(shouldAdd: boolean) {
-    document.documentElement.classList.toggle('ion-palette-dark', shouldAdd);
+  private applyTheme(isDark: boolean) {
+    this.isDarkMode.set(isDark);
+    document.documentElement.classList.toggle('ion-palette-dark', isDark);
   }
 }

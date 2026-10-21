@@ -6,7 +6,7 @@
           <ion-img src="assets/icon/gillou.png" class="menu-image"></ion-img>
         </div>
         <ion-list id="menu-list">
-          @for (p of appPages; track p; let i = $index) {
+          @for (p of appPages; track p.url) {
           <ion-menu-toggle auto-hide="false">
             <ion-item
               routerDirection="root"

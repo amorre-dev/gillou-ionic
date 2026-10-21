@@ -1,11 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
+import { provideIonicAngular } from '@ionic/angular';
 import { ScoreListPage } from './score-list.page';
 
 describe('ScoreListPage', () => {
   let component: ScoreListPage;
   let fixture: ComponentFixture<ScoreListPage>;
 
-  beforeEach(() => {
+  beforeEach(async () => {
+    localStorage.clear();
+    await TestBed.configureTestingModule({
+      imports: [ScoreListPage],
+      providers: [provideRouter([]), provideIonicAngular()],
+    }).compileComponents();
     fixture = TestBed.createComponent(ScoreListPage);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -13,5 +20,30 @@ describe('ScoreListPage', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+});
+
+describe('ScoreListPage badges', () => {
+  let page: ScoreListPage;
+
+  beforeEach(async () => {
+    localStorage.clear();
+    await TestBed.configureTestingModule({
+      imports: [ScoreListPage],
+      providers: [provideRouter([]), provideIonicAngular()],
+    }).compileComponents();
+    page = TestBed.createComponent(ScoreListPage).componentInstance;
+  });
+
+  it('renders one score per registry entry', () => {
+    expect(page.scores().length).toBe(27);
+  });
+
+  it('colours badges from 0 to 10 and wraps beyond', () => {
+    expect(page.getBadgeBackgroundColor(0)).toBe('#fff1e0');
+    expect(page.getBadgeBackgroundColor(10)).toBe('#000000');
+    expect(page.getBadgeBackgroundColor(11)).toBe('#000000');
+    expect(page.getBadgeTextColor(3)).toBe('#000000');
+    expect(page.getBadgeTextColor(12)).toBe('#ffd7a3');
   });
 });

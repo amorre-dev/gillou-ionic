@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import {
   IonContent,
   IonHeader,
@@ -8,7 +8,7 @@ import {
   IonMenuButton,
   IonButton,
   IonIcon,
-} from '@ionic/angular/standalone';
+} from '@ionic/angular';
 import { ScoreHistoryDisplayComponent } from '../../components/score-history/score-history-display.component';
 import { ScoreHistoryService } from 'src/app/services/score-history.service';
 
@@ -30,9 +30,9 @@ import { ScoreHistoryService } from 'src/app/services/score-history.service';
   ],
 })
 export class ScoreHistoryPage {
-  isHistoryEmpty = this.scoreHistoryService.isHistoryEmpty;
+  private readonly scoreHistoryService = inject(ScoreHistoryService);
 
-  constructor(private scoreHistoryService: ScoreHistoryService) {}
+  readonly isHistoryEmpty = this.scoreHistoryService.isHistoryEmpty;
 
   deleteHistory() {
     this.scoreHistoryService.deleteHistory();

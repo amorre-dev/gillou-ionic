@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import {
   IonButton,
   IonButtons,
@@ -8,7 +8,7 @@ import {
   IonToolbar,
   ModalController,
   IonIcon,
-} from '@ionic/angular/standalone';
+} from '@ionic/angular';
 import { ScoreHistoryDisplayComponent } from '../score-history-display.component';
 import { ScoreHistoryService } from 'src/app/services/score-history.service';
 
@@ -28,12 +28,10 @@ import { ScoreHistoryService } from 'src/app/services/score-history.service';
   ],
 })
 export class ScoreHistoryModalComponent {
-  isHistoryEmpty = this.scoreHistoryService.isHistoryEmpty;
+  private readonly modalCtrl = inject(ModalController);
+  private readonly scoreHistoryService = inject(ScoreHistoryService);
 
-  constructor(
-    private modalCtrl: ModalController,
-    private scoreHistoryService: ScoreHistoryService
-  ) {}
+  readonly isHistoryEmpty = this.scoreHistoryService.isHistoryEmpty;
 
   cancel() {
     return this.modalCtrl.dismiss(null, 'cancel');

@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { ScoreHistoryService } from 'src/app/services/score-history.service';
-import { IonList, IonItem, IonLabel, IonIcon } from '@ionic/angular/standalone';
+import { IonList, IonItem, IonLabel, IonIcon } from '@ionic/angular';
 import { DatePipe } from '@angular/common';
 
 @Component({
@@ -11,9 +11,9 @@ import { DatePipe } from '@angular/common';
   imports: [IonIcon, IonLabel, IonList, IonItem, DatePipe],
 })
 export class ScoreHistoryDisplayComponent {
-  scoreHistory = this.scoreHistoryService.scoreHistory;
+  private readonly scoreHistoryService = inject(ScoreHistoryService);
 
-  constructor(private scoreHistoryService: ScoreHistoryService) {}
+  readonly scoreHistory = this.scoreHistoryService.scoreHistoryNewestFirst;
 
   removeById(historyId: string) {
     this.scoreHistoryService.removeFromHistory(historyId);

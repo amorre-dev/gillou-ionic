@@ -15,6 +15,7 @@
         <ion-toggle
           (ionChange)="toggleTone($event)"
           [checked]="tone() === 'mib'"
+          aria-label="Tonalité"
         ></ion-toggle>
         <ion-icon
           class="icon-right {{ getIconClass(tone() === 'mib') }}"
@@ -23,15 +24,15 @@
         ></ion-icon>
       </div>
       } @else { @if (tone() === 'sib') {
-      <ion-button (click)="switchTone('mib')">
+      <ion-button (click)="switchTone('mib')" aria-label="Passer en Mi♭">
         <ion-icon src="assets/icon/trumpet.svg" size="large"></ion-icon>
       </ion-button>
       } @else {
-      <ion-button (click)="switchTone('sib')">
+      <ion-button (click)="switchTone('sib')" aria-label="Passer en Si♭">
         <ion-icon src="assets/icon/clarinet.svg" size="large"></ion-icon>
       </ion-button>
       } }
-      <ion-button (click)="openModal()">
+      <ion-button (click)="openModal()" aria-label="Historique">
         <ion-icon src="assets/icon/history.svg" size="large"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -40,15 +41,16 @@
 
 <ion-content [fullscreen]="true">
   <ion-list>
-    @for (score of scores(); track $index) {
+    @for (score of scores(); track score.id) {
     <div>
       <ion-item lines="none" style="padding-left: 10px; padding-right: 10px">
-        <ion-label>{{score.number}} - {{score.title}}</ion-label>
+        <ion-label>{{ score.number }} - {{ score.title }}</ion-label>
         <ion-button
           slot="end"
           shape="round"
           color="secondary"
           (click)="removeScoreFromHistory(score.id)"
+          aria-label="Retirer une annonce"
         >
           <ion-icon
             slot="icon-only"
@@ -59,7 +61,7 @@
         <ion-badge
           slot="end"
           [style.background-color]="getBadgeBackgroundColor(getHistoryOccurrences(score.id))"
-          [style.color]="getBadgeTextColor(getHistoryOccurrences(score.id), score.id)"
+          [style.color]="getBadgeTextColor(getHistoryOccurrences(score.id))"
           class="custom-badge"
         >
           {{ getHistoryOccurrences(score.id) }}
@@ -69,6 +71,7 @@
           shape="round"
           color="secondary"
           (click)="addScoreToHistory(score.id, score.title, score.number)"
+          aria-label="Ajouter une annonce"
         >
           <ion-icon
             slot="icon-only"

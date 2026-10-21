@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { ScoreService } from 'src/app/services/score.service';
 import {
   IonHeader,
@@ -13,7 +13,7 @@ import {
   IonButton,
   IonIcon,
   ItemReorderEventDetail,
-} from '@ionic/angular/standalone';
+} from '@ionic/angular';
 import { getScoreById } from 'src/app/data/identifiers/score-identifiers';
 
 @Component({
@@ -36,20 +36,19 @@ import { getScoreById } from 'src/app/data/identifiers/score-identifiers';
   ],
 })
 export class ReorderScoresPage {
-  order = this.scoreService.getOrder();
-  isOrderOriginal = this.scoreService.isOrderOriginal;
+  private readonly scoreService = inject(ScoreService);
 
-  constructor(private scoreService: ScoreService) {}
+  readonly order = this.scoreService.order;
+  readonly isOrderOriginal = this.scoreService.isOrderOriginal;
 
   reorderScores(event: CustomEvent<ItemReorderEventDetail>) {
-    const reordered = event.detail.complete(this.order);
-    console.log(reordered);
+    // complete() reorders the given array in place, so hand it a copy, never the signal's own array.
+    const reordered: string[] = event.detail.complete([...this.order()]);
     this.scoreService.setOrder(reordered);
   }
 
   resetOrder() {
     this.scoreService.resetOrder();
-    this.order = this.scoreService.getOrder();
   }
 
   getScoreIdentifierById(scoreId: string) {

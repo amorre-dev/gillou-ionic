@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import {
   IonApp,
@@ -14,9 +14,13 @@ import {
   IonIcon,
   IonImg,
   IonFooter,
-} from '@ionic/angular/standalone';
-import { ScoreRenderedCacheService } from './services/score-rendered-cache.service';
+} from '@ionic/angular';
+import { Capacitor } from '@capacitor/core';
 import { StatusBar } from '@capacitor/status-bar';
+import { ScoreRenderedCacheService } from './services/score-rendered-cache.service';
+
+const ASSET_FOLDER = 'assets/icon/';
+const PRIMARY_COLOR = '#fc861d';
 
 @Component({
   selector: 'app-root',
@@ -41,34 +45,39 @@ import { StatusBar } from '@capacitor/status-bar';
   ],
 })
 export class AppComponent implements OnInit {
-  private ASSET_FOLDER = 'assets/icon/';
+  private readonly scoreRenderedCacheService = inject(ScoreRenderedCacheService);
 
-  public appPages = [
+  readonly appPages = [
     {
       title: 'Annonces',
       url: '/score-list',
-      icon: this.ASSET_FOLDER + 'queue_music.svg',
+      icon: ASSET_FOLDER + 'queue_music.svg',
     },
     {
       title: 'Ordre des annonces',
       url: '/score-order',
-      icon: this.ASSET_FOLDER + 'low_priority.svg',
+      icon: ASSET_FOLDER + 'low_priority.svg',
     },
     {
       title: 'Historique des annonces',
       url: '/score-history',
-      icon: this.ASSET_FOLDER + 'history.svg',
+      icon: ASSET_FOLDER + 'history.svg',
     },
     {
       title: 'Options',
       url: '/settings',
-      icon: this.ASSET_FOLDER + 'settings.svg',
+      icon: ASSET_FOLDER + 'settings.svg',
     },
   ];
-  constructor(private scoreRenderedCacheService: ScoreRenderedCacheService) {}
 
-  async ngOnInit(): Promise<void> {
-    StatusBar.setBackgroundColor({ color: '#fc861d' });
-    this.scoreRenderedCacheService.initCache();
+  ngOnInit(): void {
+    if (Capacitor.isNativePlatform()) {
+      StatusBar.setBackgroundColor({ color: PRIMARY_COLOR }).catch((error) =>
+        console.warn('Could not set the status bar color', error)
+      );
+    }
+    this.scoreRenderedCacheService
+      .initCache()
+      .catch((error) => console.warn('Score pre-rendering failed', error));
   }
 }

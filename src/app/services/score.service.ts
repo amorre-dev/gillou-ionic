@@ -1,5 +1,17 @@
 import { Injectable, signal, computed } from '@angular/core';
 import { SCORE_REGISTRY } from '../data/score.registery';
+import {
+  isStringArray,
+  readJson,
+  readRaw,
+  writeJson,
+  writeRaw,
+} from '../helpers/storage.helper';
+import { Score } from '../types/score.type';
+
+export type Tone = 'sib' | 'mib';
+
+const DEFAULT_ORDER: readonly string[] = SCORE_REGISTRY.map((entry) => entry.id);
 
 @Injectable({
   providedIn: 'root',
@@ -9,110 +21,92 @@ export class ScoreService {
   private readonly ORDER_STORAGE_KEY = 'scoreOrder';
   private readonly REMOVED_STORAGE_KEY = 'removedScores';
 
-  tone = signal<'sib' | 'mib'>(this.loadTone());
-  order = signal<string[]>(this.loadOrder());
-  removedScores = signal<Set<string>>(this.loadRemovedScores());
+  readonly tone = signal<Tone>(this.loadTone());
+  readonly order = signal<string[]>(this.loadOrder());
+  readonly removedScores = signal<ReadonlySet<string>>(this.loadRemovedScores());
 
-  scores = computed(() => {
-    const currentTone = this.tone();
-    const currentOrder = this.order();
+  /** Scores to display: current tone, user order, without the scores the user disabled. */
+  readonly scores = computed<Score[]>(() => {
+    const tone = this.tone();
     const removed = this.removedScores();
+    const position = new Map(this.order().map((id, index) => [id, index]));
 
-    const orderMap = new Map(currentOrder.map((id, index) => [id, index]));
-
-    const sortedRegistry = [...SCORE_REGISTRY]
-      .filter((score) => !removed.has(score.id)) // Exclude removed scores
-      .sort((a, b) => {
-        const orderA = orderMap.get(a.id) ?? a.number;
-        const orderB = orderMap.get(b.id) ?? b.number;
-        return orderA - orderB;
-      });
-
-    return sortedRegistry.map((entry) => entry.getScore(currentTone));
+    return [...SCORE_REGISTRY]
+      .filter((entry) => !removed.has(entry.id))
+      .sort(
+        (a, b) =>
+          (position.get(a.id) ?? DEFAULT_ORDER.length) -
+          (position.get(b.id) ?? DEFAULT_ORDER.length)
+      )
+      .map((entry) => entry.getScore(tone));
   });
 
-  isOrderOriginal = computed(() => {
-    const defaultOrder = SCORE_REGISTRY.map((score) => score.id);
-    const currentOrder = this.order();
+  readonly isOrderOriginal = computed(() => {
+    const current = this.order();
     return (
-      defaultOrder.length === currentOrder.length &&
-      defaultOrder.every((id, index) => id === currentOrder[index])
+      current.length === DEFAULT_ORDER.length &&
+      DEFAULT_ORDER.every((id, index) => id === current[index])
     );
   });
 
-  constructor() {}
-
-  private saveTone() {
-    localStorage.setItem(this.TONE_STORAGE_KEY, this.tone());
+  setTone(tone: Tone) {
+    this.tone.set(tone);
+    writeRaw(this.TONE_STORAGE_KEY, tone);
   }
 
-  private saveOrder() {
-    localStorage.setItem(this.ORDER_STORAGE_KEY, JSON.stringify(this.order()));
-  }
-
-  private saveRemovedScores() {
-    localStorage.setItem(this.REMOVED_STORAGE_KEY, JSON.stringify([...this.removedScores()]));
-  }
-
-  private loadTone(): 'sib' | 'mib' {
-    const storedTone = localStorage.getItem(this.TONE_STORAGE_KEY);
-    return storedTone === 'mib' ? 'mib' : 'sib'; // Default to 'sib'
-  }
-
-  private loadOrder(): string[] {
-    const storedOrder = localStorage.getItem(this.ORDER_STORAGE_KEY);
-    return storedOrder && storedOrder !== 'undefined'
-      ? JSON.parse(storedOrder)
-      : SCORE_REGISTRY.map((score) => score.id);
-  }
-
-  private loadRemovedScores(): Set<string> {
-    const storedRemoved = localStorage.getItem(this.REMOVED_STORAGE_KEY);
-    return storedRemoved ? new Set(JSON.parse(storedRemoved)) : new Set();
-  }
-
-  setTone(newTone: 'sib' | 'mib') {
-    this.tone.update(() => {
-      this.saveTone();
-      return newTone;
-    });
-  }
-
-  setOrder(newOrder: string[]) {
-    this.order.update(() => {
-      this.saveOrder();
-      return newOrder;
-    });
+  setOrder(newOrder: readonly string[]) {
+    this.order.set(this.reconcileOrder(newOrder));
+    writeJson(this.ORDER_STORAGE_KEY, this.order());
   }
 
   resetOrder() {
-    this.order.update(() => {
-      const defaultOrder = SCORE_REGISTRY.map((score) => score.id);
-      this.saveOrder();
-      return defaultOrder;
-    });
+    this.setOrder(DEFAULT_ORDER);
   }
 
   toggleScore(scoreId: string) {
-    this.removedScores.update((current) => {
-      const updated = new Set(current);
-      if (updated.has(scoreId)) {
-        updated.delete(scoreId); // Add back
-      } else {
-        updated.add(scoreId); // Remove
-      }
-      this.saveRemovedScores();
-      return updated;
-    });
+    const updated = new Set(this.removedScores());
+    if (updated.has(scoreId)) {
+      updated.delete(scoreId);
+    } else {
+      updated.add(scoreId);
+    }
+    this.removedScores.set(updated);
+    writeJson(this.REMOVED_STORAGE_KEY, [...updated]);
   }
 
   isScoreRemoved(scoreId: string): boolean {
     return this.removedScores().has(scoreId);
   }
 
-  getOrder() {
-    return this.order();
+  private loadTone(): Tone {
+    return readRaw(this.TONE_STORAGE_KEY) === 'mib' ? 'mib' : 'sib';
   }
 
-}
+  private loadOrder(): string[] {
+    return this.reconcileOrder(
+      readJson(this.ORDER_STORAGE_KEY, [...DEFAULT_ORDER], isStringArray)
+    );
+  }
 
+  private loadRemovedScores(): Set<string> {
+    const known = new Set(DEFAULT_ORDER);
+    return new Set(
+      readJson(this.REMOVED_STORAGE_KEY, [], isStringArray).filter((id) =>
+        known.has(id)
+      )
+    );
+  }
+
+  /**
+   * Keeps only known score ids (once each, in the given order) and appends
+   * any score missing from it, so a score added to the registry later still shows up.
+   */
+  private reconcileOrder(order: readonly string[]): string[] {
+    const known = new Set(DEFAULT_ORDER);
+    const kept = order.filter(
+      (id, index) => known.has(id) && order.indexOf(id) === index
+    );
+    const missing = DEFAULT_ORDER.filter((id) => !kept.includes(id));
+    return [...kept, ...missing];
+  }
+}

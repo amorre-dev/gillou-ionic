@@ -1,23 +1,25 @@
 import { Renderer as VFRenderer, Stave, Formatter, Voice } from 'vexflow';
 import { Score } from '../types/score.type';
+import { Measure } from '../types/measure.type';
 
-export async function renderScore(
+const STAVE_HEIGHT = 120;
+const LEFT_MARGIN = 10;
+const RIGHT_MARGIN = 10;
+
+/** Renders a score as an SVG string sized for the given screen width. */
+export function renderScore(
   score: Score,
   screenWidth: number,
   isDarkMode: boolean
-): Promise<string> {
-  const availableWidth = screenWidth - 20;
-  const staveHeight = 120;
+): string {
+  const availableWidth = screenWidth - LEFT_MARGIN - RIGHT_MARGIN;
   const keyWidth = calculateKeyWidth(score.keySignature);
-  const staveWidths = calculateWidths(
-    score.measures,
-    availableWidth - keyWidth
-  );
+  const staveWidths = calculateWidths(score.measures, availableWidth - keyWidth);
   staveWidths[0] += keyWidth;
 
   const div = document.createElement('div');
   const renderer = new VFRenderer(div, VFRenderer.Backends.SVG);
-  renderer.resize(screenWidth, staveHeight);
+  renderer.resize(screenWidth, STAVE_HEIGHT);
   const context = renderer.getContext();
 
   if (isDarkMode) {
@@ -25,7 +27,11 @@ export async function renderScore(
     context.setFillStyle('#ffffff');
   }
 
-  let x = 10;
+  const [beatsPerMeasure, beatValue] = score.timeSignature
+    .split('/')
+    .map((part) => parseInt(part, 10));
+
+  let x = LEFT_MARGIN;
   const y = 0;
 
   score.measures.forEach((measure, index) => {
@@ -34,7 +40,7 @@ export async function renderScore(
 
     if (index === 0) {
       stave
-        .addClef('treble')
+        .addClef(score.clef)
         .addTimeSignature(score.timeSignature)
         .addKeySignature(score.keySignature);
     }
@@ -42,30 +48,24 @@ export async function renderScore(
     stave.setContext(context).draw();
 
     const voice = new Voice({
-      num_beats: parseInt(score.timeSignature.split('/')[0]),
-      beat_value: parseInt(score.timeSignature.split('/')[1]),
+      num_beats: beatsPerMeasure,
+      beat_value: beatValue,
     });
     voice.addTickables(measure.notes);
 
-    const formatter = new Formatter();
-    formatter.joinVoices([voice]).formatToStave([voice], stave);
-
+    new Formatter().joinVoices([voice]).formatToStave([voice], stave);
     voice.draw(context, stave);
 
-    if (measure.beams) {
-      measure.beams.forEach((beam) => beam.setContext(context).draw());
-    }
-
-    if (measure.ties) {
-      measure.ties.forEach((ties) => ties.setContext(context).draw());
-    }
+    measure.beams?.forEach((beam) => beam.setContext(context).draw());
+    measure.ties?.forEach((tie) => tie.setContext(context).draw());
 
     x += staveWidth;
   });
 
-  return div.innerHTML; // Return rendered SVG as string
+  return div.innerHTML;
 }
 
+/** Horizontal room taken by clef, time signature and key signature on the first stave. */
 function calculateKeyWidth(keySignature: string): number {
   switch (keySignature) {
     case 'C':
@@ -78,9 +78,9 @@ function calculateKeyWidth(keySignature: string): number {
   }
 }
 
-function calculateWidths(measures: any[], availableWidth: number): number[] {
-  const weights = measures.reduce((sum, measure) => sum + measure.weight, 0);
-  const noteWidth = availableWidth / weights;
-
-  return measures.map((measure) => noteWidth * measure.weight);
+/** Splits the available width between measures proportionally to their weight. */
+function calculateWidths(measures: Measure[], availableWidth: number): number[] {
+  const totalWeight = measures.reduce((sum, measure) => sum + measure.weight, 0);
+  const unitWidth = availableWidth / totalWeight;
+  return measures.map((measure) => unitWidth * measure.weight);
 }

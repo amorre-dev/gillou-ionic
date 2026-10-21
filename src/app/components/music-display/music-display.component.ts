@@ -1,21 +1,22 @@
 import {
-  Component,
   AfterViewInit,
+  Component,
   ElementRef,
-  Input,
-  ViewChild,
-  OnChanges,
-  SimpleChanges,
   OnDestroy,
   effect,
+  inject,
+  input,
+  signal,
+  viewChild,
 } from '@angular/core';
-import { Platform, GestureController } from '@ionic/angular';
-import { ScreenOrientation } from '@capacitor/screen-orientation';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Gesture, GestureController, Platform } from '@ionic/angular';
 import { Score } from '../../types/score.type';
 import { ThemeService } from '../../services/theme.service';
-import { ScoreRenderedCacheService } from 'src/app/services/score-rendered-cache.service';
-import { generateCacheKey } from 'src/app/helpers/cache-key.helper';
-import { ScoreHistoryService } from 'src/app/services/score-history.service';
+import { ScoreRenderedCacheService } from '../../services/score-rendered-cache.service';
+import { ScoreHistoryService } from '../../services/score-history.service';
+
+const DOUBLE_TAP_THRESHOLD_MS = 500;
 
 @Component({
   selector: 'app-music-display',
@@ -23,91 +24,69 @@ import { ScoreHistoryService } from 'src/app/services/score-history.service';
   template: ` <div #musicCanvas></div> `,
   styleUrls: ['./music-display.component.scss'],
 })
-export class MusicDisplayComponent
-  implements OnChanges, AfterViewInit, OnDestroy
-{
-  @ViewChild('musicCanvas', { static: false }) musicCanvas!: ElementRef;
-  @Input() score!: Score;
+export class MusicDisplayComponent implements AfterViewInit, OnDestroy {
+  private readonly themeService = inject(ThemeService);
+  private readonly platform = inject(Platform);
+  private readonly scoreCacheService = inject(ScoreRenderedCacheService);
+  private readonly gestureCtrl = inject(GestureController);
+  private readonly historyService = inject(ScoreHistoryService);
 
-  isDarkMode = this.themeService.isDarkMode;
+  readonly score = input.required<Score>();
 
-  private lastOnStart: number = 0;
-  private DOUBLE_CLICK_THRESHOLD: number = 500;
+  private readonly musicCanvas =
+    viewChild<ElementRef<HTMLDivElement>>('musicCanvas');
+  private readonly screenWidth = signal(this.platform.width());
 
-  constructor(
-    private themeService: ThemeService,
-    private platform: Platform,
-    private scoreCacheService: ScoreRenderedCacheService,
-    private gestureCtrl: GestureController,
-    private historyService: ScoreHistoryService
-  ) {
-    ScreenOrientation.addListener('screenOrientationChange', () => {
-      this.renderOrUseCache(); // Retrigger rendering when orientation changes
-    });
+  private gesture?: Gesture;
+  private lastTapAt = 0;
+
+  constructor() {
+    // Window resize also fires on device rotation, so one listener covers both.
+    this.platform.resize
+      .pipe(takeUntilDestroyed())
+      .subscribe(() => this.screenWidth.set(this.platform.width()));
+
+    // Re-renders whenever the score, the theme, the width or the canvas element changes.
     effect(() => {
-      this.renderOrUseCache();
+      const canvas = this.musicCanvas();
+      const svg = this.scoreCacheService.getOrRender(
+        this.score(),
+        this.screenWidth(),
+        this.themeService.isDarkMode()
+      );
+      if (canvas) {
+        canvas.nativeElement.innerHTML = svg;
+      }
     });
   }
 
   ngAfterViewInit() {
-    this.renderOrUseCache();
-    const gesture = this.gestureCtrl.create({
-      el: this.musicCanvas.nativeElement,
+    const canvas = this.musicCanvas();
+    if (!canvas) {
+      return;
+    }
+    this.gesture = this.gestureCtrl.create({
+      el: canvas.nativeElement,
       threshold: 0,
-      onStart: () => this.onStart(),
-      gestureName: 'double-click',
+      gestureName: 'double-tap',
+      onStart: () => this.onTap(),
     });
-
-    gesture.enable();
-  }
-
-  private onStart() {
-    const now = Date.now();
-
-    if (Math.abs(now - this.lastOnStart) <= this.DOUBLE_CLICK_THRESHOLD) {
-      this.historyService.addToHistory(
-        this.score.id,
-        this.score.title,
-        this.score.number
-      );
-      this.lastOnStart = 0;
-    } else {
-      this.lastOnStart = now;
-    }
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes['score'] && !changes['score'].firstChange) {
-      this.renderOrUseCache();
-    }
+    this.gesture.enable();
   }
 
   ngOnDestroy() {
-    ScreenOrientation.removeAllListeners();
+    this.gesture?.destroy();
   }
 
-  private async renderOrUseCache() {
-    if (!this.score) {
-      console.error('Score is not defined!');
-      return;
+  /** A double tap on the score announces it (same as the "+" button). */
+  private onTap() {
+    const now = Date.now();
+    if (now - this.lastTapAt <= DOUBLE_TAP_THRESHOLD_MS) {
+      const score = this.score();
+      this.historyService.addToHistory(score.id, score.title, score.number);
+      this.lastTapAt = 0;
+    } else {
+      this.lastTapAt = now;
     }
-    const platformWidth = this.platform.width();
-    const cacheKey = generateCacheKey(
-      this.score.id,
-      this.score.keySignature,
-      platformWidth,
-      this.isDarkMode()
-    );
-
-    // Fetch SVG from cache or render it via the service
-    const svg = await this.scoreCacheService.getOrRender(
-      this.score,
-      platformWidth,
-      this.isDarkMode(),
-      cacheKey
-    );
-
-    // Display the SVG in the canvas
-    this.musicCanvas.nativeElement.innerHTML = svg;
   }
 }

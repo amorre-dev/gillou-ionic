@@ -1,16 +1,9 @@
-# This file is used by the build system to adjust CSS and JS output to support the specified browsers below.
-# For additional information regarding the format and rule options, please see:
-# https://github.com/browserslist/browserslist#queries
-
-# For the full list of supported browsers by the Angular framework, please see:
-# https://angular.io/guide/browser-support
-
-# You can see what browsers were selected by your queries by running:
-#   npx browserslist
-
-Chrome >=79
-ChromeAndroid >=79
-Firefox >=70
-Edge >=79
-Safari >=14
-iOS >=14
+# Browsers the app is built for: Angular 21's support matrix, which is stricter than
+# Ionic 9 (Chromium 89+, Safari 16+) and Capacitor 8 (Android 7+ WebView, iOS 15+).
+# https://angular.dev/reference/versions#browser-support
+Chrome >= 111
+ChromeAndroid >= 111
+Edge >= 111
+Firefox >= 112
+Safari >= 16.4
+iOS >= 16.4

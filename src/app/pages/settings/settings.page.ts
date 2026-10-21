@@ -1,6 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { Component, inject } from '@angular/core';
 import {
   IonContent,
   IonHeader,
@@ -16,8 +14,9 @@ import {
   IonButton,
   IonButtons,
   IonMenuButton,
-} from '@ionic/angular/standalone';
-import { ScoreService } from 'src/app/services/score.service';
+  ToggleCustomEvent,
+} from '@ionic/angular';
+import { ScoreService, Tone } from 'src/app/services/score.service';
 import {
   AUBADE_MATINALE_ID,
   MITANT_DES_CAMPS_ID,
@@ -42,29 +41,24 @@ import { ThemeService } from 'src/app/services/theme.service';
     IonHeader,
     IonTitle,
     IonToolbar,
-    CommonModule,
-    FormsModule,
     IonButtons,
     IonMenuButton,
   ],
 })
 export class SettingsPage {
-  tone = this.scoreService.tone;
-  isOrderOriginal = this.scoreService.isOrderOriginal;
-  isDarkMode = this.themeService.isDarkMode;
+  private readonly scoreService = inject(ScoreService);
+  private readonly themeService = inject(ThemeService);
 
-  constructor(
-    private scoreService: ScoreService,
-    private themeService: ThemeService
-  ) {}
+  readonly tone = this.scoreService.tone;
+  readonly isOrderOriginal = this.scoreService.isOrderOriginal;
+  readonly isDarkMode = this.themeService.isDarkMode;
 
-  switchTone(tone: 'sib' | 'mib') {
-    this.scoreService.setTone(tone); // Update the tone
+  switchTone(tone: Tone) {
+    this.scoreService.setTone(tone);
   }
 
-  toggleTone(event: any) {
-    const newTone = event.detail.checked ? 'mib' : 'sib';
-    this.switchTone(newTone);
+  toggleTone(event: ToggleCustomEvent) {
+    this.switchTone(event.detail.checked ? 'mib' : 'sib');
   }
 
   isAubadeRemoved(): boolean {

@@ -6,7 +6,7 @@
     <ion-title>Ordre des Annonces</ion-title>
 
     <ion-buttons slot="end">
-      @if(!isOrderOriginal()){
+      @if (!isOrderOriginal()) {
       <ion-button (click)="resetOrder()">
         <ion-icon src="assets/icon/restart.svg" size="large"></ion-icon>
       </ion-button>
@@ -17,7 +17,7 @@
 
 <ion-content [fullscreen]="true">
   <ion-reorder-group (ionItemReorder)="reorderScores($event)" disabled="false">
-    @for (id of order; track $index) {
+    @for (id of order(); track id) {
     <ion-item>
       {{ getScoreIdentifierById(id)?.number }} - {{
       getScoreIdentifierById(id)?.title }}

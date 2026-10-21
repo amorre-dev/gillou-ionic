@@ -1,4 +1,5 @@
-import { Component, signal, ViewChild } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
   IonHeader,
   IonToolbar,
@@ -13,17 +14,20 @@ import {
   IonLabel,
   IonBadge,
   IonToggle,
-  IonModal,
   ModalController,
-} from '@ionic/angular/standalone';
-import { Platform } from '@ionic/angular';
+  Platform,
+  ToggleCustomEvent,
+} from '@ionic/angular';
 import { addIcons } from 'ionicons';
 import { add, remove } from 'ionicons/icons';
 import { MusicDisplayComponent } from 'src/app/components/music-display/music-display.component';
-import { ScoreService } from 'src/app/services/score.service';
+import { ScoreService, Tone } from 'src/app/services/score.service';
 import { BADGE_COLORS } from 'src/theme/badge.theme';
 import { ScoreHistoryModalComponent } from 'src/app/components/score-history/score-history-modal/score-history-modal.component';
 import { ScoreHistoryService } from 'src/app/services/score-history.service';
+
+/** Below this width (Pixel 8 viewport) the toolbar shows a single tone button instead of the toggle. */
+const TOGGLE_MIN_WIDTH = 412;
 
 @Component({
   selector: 'app-score-list',
@@ -48,30 +52,27 @@ import { ScoreHistoryService } from 'src/app/services/score-history.service';
   ],
 })
 export class ScoreListPage {
-  @ViewChild(IonModal) modal!: IonModal;
+  private readonly scoreService = inject(ScoreService);
+  private readonly platform = inject(Platform);
+  private readonly modalCtrl = inject(ModalController);
+  private readonly scoreHistoryService = inject(ScoreHistoryService);
 
-  scores = this.scoreService.scores;
-  tone = this.scoreService.tone;
-  historyValue = 0;
-  pageWidth = signal(0);
+  readonly scores = this.scoreService.scores;
+  readonly tone = this.scoreService.tone;
+  readonly pageWidth = signal(this.platform.width());
 
-  constructor(
-    private scoreService: ScoreService,
-    private platform: Platform,
-    private modalCtrl: ModalController,
-    private scoreHistoryService: ScoreHistoryService
-  ) {
+  constructor() {
     addIcons({ add, remove });
-    this.pageWidth.set(platform.width());
+    this.platform.resize
+      .pipe(takeUntilDestroyed())
+      .subscribe(() => this.pageWidth.set(this.platform.width()));
   }
 
   async openModal() {
     const modal = await this.modalCtrl.create({
       component: ScoreHistoryModalComponent,
     });
-    modal.present();
-
-    const { data, role } = await modal.onWillDismiss();
+    await modal.present();
   }
 
   addScoreToHistory(scoreId: string, scoreTitle: string, scoreNumber: number) {
@@ -82,21 +83,20 @@ export class ScoreListPage {
     this.scoreHistoryService.removeLastByScoreId(scoreId);
   }
 
-  getHistoryOccurrences(scoreId: string) {
-    return this.scoreHistoryService.getOccurrences(scoreId)();
+  getHistoryOccurrences(scoreId: string): number {
+    return this.scoreHistoryService.getOccurrences(scoreId);
   }
 
-  switchTone(tone: 'sib' | 'mib') {
-    this.scoreService.setTone(tone); // Update the tone
+  switchTone(tone: Tone) {
+    this.scoreService.setTone(tone);
   }
 
-  toggleTone(event: any) {
-    const newTone = event.detail.checked ? 'mib' : 'sib';
-    this.switchTone(newTone);
+  toggleTone(event: ToggleCustomEvent) {
+    this.switchTone(event.detail.checked ? 'mib' : 'sib');
   }
 
   isToggleButtonOk() {
-    return this.pageWidth() >= 412; // viewport for pixel8
+    return this.pageWidth() >= TOGGLE_MIN_WIDTH;
   }
 
   getIconClass(toggled: boolean): string {
@@ -108,14 +108,11 @@ export class ScoreListPage {
     return foundColor ? foundColor.code : '#000000';
   }
 
-  getBadgeTextColor(value: number, scoreId: string): string {
-    const moduloVal = value % 10;
-    const foundColor = BADGE_COLORS.find((c) => c.key === moduloVal);
-
+  getBadgeTextColor(value: number): string {
+    const foundColor = BADGE_COLORS.find((c) => c.key === value % 10);
     if (!foundColor) {
       return '#ffffff';
     }
-
     return value < 10 ? foundColor.text : foundColor.code;
   }
 }

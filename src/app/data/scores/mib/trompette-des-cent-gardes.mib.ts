@@ -1,4 +1,4 @@
-import { StaveNote, Beam, StaveTie } from 'vexflow';
+import { StaveNote, Beam } from 'vexflow';
 import { SheetData } from 'src/app/types/sheet-data.type';
 import { Measure } from 'src/app/types/measure.type';
 import { dotted } from 'src/app/helpers/dotted.helper';
