@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024"><defs><mask id="m206941" maskUnits="userSpaceOnUse" x="0" y="0" width="1024" height="1024"><g transform="translate(-59.160 -74.499) scale(2.23110)">
+
+
+<circle cx="256" cy="392" r="80" fill="#FFFFFF" stroke="#000000" stroke-width="4"/>
+<rect x="190" y="236" width="132" height="100" rx="14" fill="#FFFFFF" stroke="#000000" stroke-width="6"/>
+
+<g fill="#000000" transform="translate(256 278) scale(0.5) translate(-256 -198)">
+<path d="M256 300 L256 222" stroke="#000000" stroke-width="5" stroke-linecap="round"/>
+<path transform="rotate(-38 256 296)" d="M256 296 C263.5 287 263.5 275 256 266 C248.5 275 248.5 287 256 296 Z"/>
+<path transform="rotate(38 256 296)" d="M256 296 C263.5 287 263.5 275 256 266 C248.5 275 248.5 287 256 296 Z"/>
+<path transform="rotate(-38 256 277)" d="M256 277 C263 268.6 263 257.4 256 249 C249 257.4 249 268.6 256 277 Z"/>
+<path transform="rotate(38 256 277)" d="M256 277 C263 268.6 263 257.4 256 249 C249 257.4 249 268.6 256 277 Z"/>
+<path transform="rotate(-38 256 258)" d="M256 258 C262.5 250.5 262.5 240.5 256 233 C249.5 240.5 249.5 250.5 256 258 Z"/>
+<path transform="rotate(38 256 258)" d="M256 258 C262.5 250.5 262.5 240.5 256 233 C249.5 240.5 249.5 250.5 256 258 Z"/>
+<path transform="rotate(-38 256 240)" d="M256 240 C262 233.4 262 224.6 256 218 C250 224.6 250 233.4 256 240 Z"/>
+<path transform="rotate(38 256 240)" d="M256 240 C262 233.4 262 224.6 256 218 C250 224.6 250 233.4 256 240 Z"/>
+<path d="M256 226 C263 217.6 263 206.4 256 198 C249 206.4 249 217.6 256 226 Z"/>
+</g><g fill="#FFFFFF" stroke="#000000" stroke-width="4.5">
+<ellipse cx="196" cy="186" rx="52" ry="84" transform="rotate(-9 196 270)"/><ellipse cx="316" cy="186" rx="52" ry="84" transform="rotate(9 316 270)"/><ellipse cx="220" cy="172" rx="58" ry="98" transform="rotate(-4 220 270)"/><ellipse cx="292" cy="172" rx="58" ry="98" transform="rotate(4 292 270)"/><ellipse cx="256" cy="162" rx="62" ry="108"/>
+</g>
+</g></mask></defs><rect width="1024" height="1024" fill="#FFFFFF" mask="url(#m206941)"/></svg>

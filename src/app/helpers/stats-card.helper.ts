@@ -68,12 +68,16 @@ export async function renderStatsCard(stats: CarnivalStats, logoUrl = 'assets/ic
   // Footer with logo
   const logo = await loadImage(logoUrl).catch(() => null);
   const footerY = H - 110;
+  let textX = 72;
   if (logo) {
-    ctx.drawImage(logo, 72, footerY - 44, 88, 88);
+    const h = 96;
+    const w = Math.round((h * logo.naturalWidth) / logo.naturalHeight);
+    ctx.drawImage(logo, 72, footerY - 48, w, h);
+    textX = 72 + w + 24;
   }
   ctx.fillStyle = C.muted;
   ctx.font = `700 32px ${FONT}`;
-  ctx.fillText('Fait avec Gillou · par am-e.dev', logo ? 184 : 72, footerY + 12);
+  ctx.fillText('Fait avec Gillou · par am-e.dev', textX, footerY + 12);
 
   return new Promise((resolve, reject) =>
     canvas.toBlob((blob) => (blob ? resolve(blob) : reject(new Error('PNG export failed'))), 'image/png')
