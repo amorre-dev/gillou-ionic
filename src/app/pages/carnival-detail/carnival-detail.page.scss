@@ -138,6 +138,10 @@ app-score-history-display {
   font-weight: 800;
 }
 
+.numbers-card__name {
+  display: block;
+}
+
 .numbers-card__share {
   margin: 10px -8px 0;
   --color: var(--gillou-link);

@@ -72,7 +72,15 @@ export function buildCarnivalStats(
 }
 
 const plural = (n: number, word: string) => `${n} ${word}${n > 1 ? 's' : ''}`;
-const rankText = (rank: ScoreRank | null) => (rank ? `${rank.names.join(', ')} (${rank.count}×)` : '—');
+
+/** "Label : Name (3×)", or for ties "Label (1×) :" followed by one name per line. */
+function rankLines(label: string, rank: ScoreRank, prefix: string): string[] {
+  if (rank.names.length === 1) {
+    return [`${prefix}${label} : ${rank.names[0]} (${rank.count}×)`];
+  }
+  const indent = ' '.repeat(prefix.length + 2);
+  return [`${prefix}${label} (${rank.count}×) :`, ...rank.names.map((name) => `${indent}– ${name}`)];
+}
 
 /** Plain-text version of the numbers, for apps that accept text. */
 export function statsToText(stats: CarnivalStats): string {
@@ -89,10 +97,10 @@ export function statsToText(stats: CarnivalStats): string {
     }
     const bullet = block.label ? '  ' : '• ';
     if (block.most) {
-      lines.push(`${bullet}Le plus joué : ${rankText(block.most)}`);
+      lines.push(...rankLines('Le plus joué', block.most, bullet));
     }
     if (block.least) {
-      lines.push(`${bullet}Le moins joué : ${rankText(block.least)}`);
+      lines.push(...rankLines('Le moins joué', block.least, bullet));
     }
   }
   lines.push('', 'Fait avec Gillou');

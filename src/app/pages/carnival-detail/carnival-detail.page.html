@@ -56,10 +56,16 @@
       <span class="numbers-card__label">annonce{{ r.total > 1 ? 's' : '' }} jouée{{ r.total > 1 ? 's' : '' }}</span>
     </div>
     @if (r.most) {
-    <p class="numbers-card__row"><span>Le plus joué</span><strong>{{ r.most.names.join(', ') }} · {{ r.most.count }}×</strong></p>
+    <p class="numbers-card__row">
+      <span>Le plus joué · {{ r.most.count }}×</span>
+      <strong>@for (name of r.most.names; track name) {<span class="numbers-card__name">{{ name }}</span>}</strong>
+    </p>
     }
     @if (r.least) {
-    <p class="numbers-card__row"><span>Le moins joué</span><strong>{{ r.least.names.join(', ') }} · {{ r.least.count }}×</strong></p>
+    <p class="numbers-card__row">
+      <span>Le moins joué · {{ r.least.count }}×</span>
+      <strong>@for (name of r.least.names; track name) {<span class="numbers-card__name">{{ name }}</span>}</strong>
+    </p>
     }
     <ion-button class="numbers-card__share" expand="block" fill="clear" (click)="showStats()">
       <ion-icon slot="start" src="assets/icon/share.svg"></ion-icon>

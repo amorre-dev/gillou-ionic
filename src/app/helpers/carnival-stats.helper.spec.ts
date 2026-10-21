@@ -37,6 +37,7 @@ describe('carnival stats', () => {
     expect(text).toContain('🎺 Binche 2026 · Binche');
     expect(text).toContain('• 5 annonces jouées');
     expect(text).toContain('Le plus joué : Air Classique (3×)');
+    expect(text).toContain('• Le moins joué (1×) :\n    – La classe\n    – El doudou');
     expect(text).toContain('Fait avec Gillou');
   });
 

@@ -5,7 +5,9 @@ import { CarnivalStats, StatsBlock } from './carnival-stats.helper';
  * Colours mirror the light theme tokens; the image is the same in both app themes.
  */
 const W = 1080;
-const H = 1350;
+/** Minimum height (4:5 portrait); the card grows when long titles or ties need more room. */
+const MIN_H = 1350;
+const FOOTER_H = 170;
 const C = {
   bg: '#fff6ee',
   band: '#e9a262',
@@ -22,18 +24,24 @@ const FONT = 'Nunito, "Segoe UI", Roboto, sans-serif';
 export async function renderStatsCard(stats: CarnivalStats, logoUrl = 'assets/icon/gillou.png'): Promise<Blob> {
   await loadFonts();
   const canvas = document.createElement('canvas');
-  canvas.width = W;
-  canvas.height = H;
   const ctx = canvas.getContext('2d');
   if (!ctx) {
     throw new Error('Canvas 2D unavailable');
   }
 
+  // Measure first so the canvas can grow with long titles and ties.
+  const bandH = 330;
+  const compact = stats.blocks.length > 1;
+  const layouts = stats.blocks.map((block) => layoutBlock(ctx, block, compact));
+  const blocksH = layouts.reduce((sum, l) => sum + l.height, 0) + (layouts.length - 1) * (compact ? 18 : 36);
+  const H = Math.max(MIN_H, bandH + 56 + blocksH + 40 + FOOTER_H);
+  canvas.width = W;
+  canvas.height = H;
+
   ctx.fillStyle = C.bg;
   ctx.fillRect(0, 0, W, H);
 
   // Accent band with the carnival identity
-  const bandH = 330;
   ctx.fillStyle = C.band;
   roundRect(ctx, 0, 0, W, bandH, [0, 0, 56, 56]);
   ctx.fill();
@@ -41,9 +49,8 @@ export async function renderStatsCard(stats: CarnivalStats, logoUrl = 'assets/ic
   ctx.font = `800 40px ${FONT}`;
   ctx.fillText('MON CARNAVAL EN CHIFFRES', 72, 96);
   ctx.font = `800 64px ${FONT}`;
-  const nameLines = wrap(ctx, stats.name, W - 144, 2);
   let y = 180;
-  for (const line of nameLines) {
+  for (const line of wrap(ctx, stats.name, W - 144, 2)) {
     ctx.fillText(line, 72, y);
     y += 72;
   }
@@ -56,13 +63,9 @@ export async function renderStatsCard(stats: CarnivalStats, logoUrl = 'assets/ic
 
   // Blocks
   y = bandH + 56;
-  const compact = stats.blocks.length > 1;
-  for (const block of stats.blocks) {
-    y = drawBlock(ctx, block, y, compact);
-    y += compact ? 18 : 36;
-    if (y > H - 190) {
-      break; // more days than fit: the text version still lists them all
-    }
+  for (const layout of layouts) {
+    drawBlock(ctx, layout, y);
+    y += layout.height + (compact ? 18 : 36);
   }
 
   // Footer with logo
@@ -84,59 +87,87 @@ export async function renderStatsCard(stats: CarnivalStats, logoUrl = 'assets/ic
   );
 }
 
-function drawBlock(ctx: CanvasRenderingContext2D, block: StatsBlock, top: number, compact: boolean): number {
+interface RankLayout {
+  label: string;
+  /** One entry per score; a long title may wrap onto several lines. */
+  lines: string[];
+  count: number;
+}
+
+interface BlockLayout {
+  block: StatsBlock;
+  compact: boolean;
+  ranks: RankLayout[];
+  height: number;
+}
+
+const GEOMETRY = {
+  full: { pad: 40, headH: 0, bigH: 170, labelH: 40, lineH: 54, rankGap: 18, nameFont: `800 44px ${FONT}`, labelFont: `700 30px ${FONT}` },
+  compact: { pad: 24, headH: 58, bigH: 0, labelH: 32, lineH: 44, rankGap: 12, nameFont: `800 34px ${FONT}`, labelFont: `700 26px ${FONT}` },
+};
+
+function layoutBlock(ctx: CanvasRenderingContext2D, block: StatsBlock, compact: boolean): BlockLayout {
+  const g = compact ? GEOMETRY.compact : GEOMETRY.full;
+  const maxW = W - 144 - g.pad * 2 - 170; // room for the count pill on the right
+  ctx.font = g.nameFont;
+  const ranks: RankLayout[] = [];
+  const add = (label: string, rank: StatsBlock['most']) => {
+    if (rank) {
+      ranks.push({ label, count: rank.count, lines: rank.names.flatMap((name) => wrap(ctx, name, maxW, 3)) });
+    }
+  };
+  add('Le plus joué', block.most);
+  add('Le moins joué', block.least);
+  const ranksH = ranks.reduce((sum, r) => sum + g.labelH + r.lines.length * g.lineH + g.rankGap, 0);
+  const headH = block.label ? g.headH : 0;
+  return { block, compact, ranks, height: g.pad + headH + g.bigH + ranksH + g.pad - g.rankGap };
+}
+
+function drawBlock(ctx: CanvasRenderingContext2D, layout: BlockLayout, top: number) {
+  const { block, compact, ranks } = layout;
+  const g = compact ? GEOMETRY.compact : GEOMETRY.full;
   const x = 72;
   const w = W - 144;
-  const pad = compact ? 24 : 40;
-  const rowH = compact ? 72 : 110;
-  const headH = block.label ? 58 : 0;
-  const bigH = compact ? 0 : 170;
-  const rows = [block.most, block.least].filter(Boolean).length;
-  const h = pad + headH + bigH + rows * rowH + (compact ? 10 : pad);
 
   ctx.fillStyle = C.card;
   ctx.strokeStyle = C.border;
   ctx.lineWidth = 2;
-  roundRect(ctx, x, top, w, h, 40);
+  roundRect(ctx, x, top, w, layout.height, 40);
   ctx.fill();
   ctx.stroke();
 
-  let y = top + pad;
+  let y = top + g.pad;
   if (block.label) {
     ctx.fillStyle = C.ink;
     ctx.font = `800 40px ${FONT}`;
-    ctx.fillText(block.label, x + pad, y + 34);
-    pill(ctx, `${block.total} annonce${block.total > 1 ? 's' : ''}`, x + w - pad, y - 2, true);
-    y += headH;
+    ctx.fillText(block.label, x + g.pad, y + 34);
+    pill(ctx, `${block.total} annonce${block.total > 1 ? 's' : ''}`, x + w - g.pad, y - 2, true);
+    y += g.headH;
   }
   if (!compact) {
     ctx.fillStyle = C.ink;
     ctx.font = `800 128px ${FONT}`;
-    ctx.fillText(String(block.total), x + pad, y + 118);
+    ctx.fillText(String(block.total), x + g.pad, y + 118);
     const numW = ctx.measureText(String(block.total)).width;
     ctx.fillStyle = C.muted;
     ctx.font = `700 40px ${FONT}`;
-    ctx.fillText(`annonce${block.total > 1 ? 's' : ''} jouée${block.total > 1 ? 's' : ''}`, x + pad + numW + 24, y + 112);
-    y += bigH;
+    ctx.fillText(`annonce${block.total > 1 ? 's' : ''} jouée${block.total > 1 ? 's' : ''}`, x + g.pad + numW + 24, y + 112);
+    y += g.bigH;
   }
-  const row = (label: string, names: string[], count: number) => {
+  for (const rank of ranks) {
     ctx.fillStyle = C.muted;
-    ctx.font = `700 ${compact ? 26 : 30}px ${FONT}`;
-    ctx.fillText(label.toUpperCase(), x + pad, y + (compact ? 22 : 30));
+    ctx.font = g.labelFont;
+    ctx.fillText(rank.label.toUpperCase(), x + g.pad, y + g.labelH - 8);
+    pill(ctx, `${rank.count}×`, x + w - g.pad, y + g.labelH - 10, false);
+    y += g.labelH;
     ctx.fillStyle = C.ink;
-    ctx.font = `800 ${compact ? 34 : 44}px ${FONT}`;
-    const maxW = w - pad * 2 - 200;
-    ctx.fillText(ellipsis(ctx, names.join(', '), maxW), x + pad, y + (compact ? 58 : 82));
-    pill(ctx, `${count}×`, x + w - pad, y + (compact ? 12 : 34), false);
-    y += rowH;
-  };
-  if (block.most) {
-    row('Le plus joué', block.most.names, block.most.count);
+    ctx.font = g.nameFont;
+    for (const line of rank.lines) {
+      ctx.fillText(line, x + g.pad, y + g.lineH - 14);
+      y += g.lineH;
+    }
+    y += g.rankGap;
   }
-  if (block.least) {
-    row('Le moins joué', block.least.names, block.least.count);
-  }
-  return top + h;
 }
 
 function pill(ctx: CanvasRenderingContext2D, text: string, right: number, top: number, soft: boolean) {
