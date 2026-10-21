@@ -36,8 +36,12 @@
     </ion-button>
     <ion-button expand="block" class="facebook-button" [disabled]="busy() || !previewUrl()" (click)="shareToFacebook()">
       <ion-icon slot="start" src="assets/icon/facebook.svg"></ion-icon>
-      Publier sur Facebook
+      {{ canShare ? 'Publier sur Facebook' : "Télécharger l'image et ouvrir Facebook" }}
     </ion-button>
-    <p class="hint">Les réseaux sociaux gardent l'image et ignorent souvent le texte : les chiffres sont dessinés dessus.</p>
+    @if (canShare) {
+    <p class="hint">Facebook ouvre sa publication avec l'image ; il ignore le texte pré-rempli, c'est pourquoi les chiffres sont dessinés dessus.</p>
+    } @else {
+    <p class="hint">Depuis un navigateur, Facebook n'accepte pas d'image envoyée directement : ajoutez le fichier téléchargé à votre publication.</p>
+    }
   </div>
 </ion-content>

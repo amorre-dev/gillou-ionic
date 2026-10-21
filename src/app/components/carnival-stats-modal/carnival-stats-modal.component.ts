@@ -86,12 +86,19 @@ export class CarnivalStatsModalComponent implements OnInit, OnDestroy {
     await this.send('Mon carnaval en chiffres');
   }
 
+  /**
+   * On a phone: the system share sheet with the image, where Facebook opens its composer
+   * with the picture attached (Facebook ignores prefilled text, hence the image).
+   * In a browser there is no such hand-off: the image is downloaded and Facebook opened,
+   * the picture is then added to the post by hand.
+   */
   async shareToFacebook() {
     if (this.files.canShare) {
       await this.toast('Choisissez Facebook dans la liste de partage.');
       await this.send('Publier sur Facebook');
     } else {
       await this.send('Publier sur Facebook');
+      await this.toast("Image enregistrée dans vos téléchargements : ajoutez-la à votre publication.");
       window.open('https://www.facebook.com/', '_blank', 'noopener');
     }
   }
