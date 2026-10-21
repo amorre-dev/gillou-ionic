@@ -18,15 +18,16 @@ describe('AppComponent', () => {
     expect(fixture.componentInstance).toBeTruthy();
   });
 
-  it('should list the four menu entries', () => {
+  it('should list the five menu entries', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     // Stencil patches textContent on slotted Ionic components, so read innerHTML.
     const labels = Array.from(
       fixture.nativeElement.querySelectorAll('ion-label') as NodeListOf<HTMLElement>
     ).map((label) => label.innerHTML);
-    expect(labels.length).toEqual(4);
+    expect(labels.length).toEqual(5);
     expect(labels[0]).toContain('Annonces');
-    expect(labels[3]).toContain('Options');
+    expect(labels[3]).toContain('Carnavals');
+    expect(labels[4]).toContain('Options');
   });
 });

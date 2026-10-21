@@ -9,6 +9,7 @@ const AirClassique = (tone: 'sib' | 'mib'): Score => {
   return {
     ...AIR_CLASSIQUE_ID,
     ...sheetData,
+    tone,
     timeSignature: '2/4',
   };
 };

@@ -1,4 +1,4 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
@@ -8,74 +8,66 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-list>
-    <!-- Tonalité Switch -->
-    <ion-item lines="none">
+  <h3 class="section-title">Instrument</h3>
+  <ion-list class="gillou-list" lines="none">
+    <ion-item>
       <ion-label>Tonalité</ion-label>
-      <div class="toggle-container">
-        <ion-icon src="assets/icon/trumpet.svg" size="large"></ion-icon>
-        <ion-toggle
-          (ionChange)="toggleTone($event)"
-          [checked]="tone() === 'mib'"
-        ></ion-toggle>
-        <ion-icon src="assets/icon/clarinet.svg" size="large"></ion-icon>
-      </div>
+      <app-tone-segment slot="end"></app-tone-segment>
     </ion-item>
+  </ion-list>
 
-    <ion-item-divider></ion-item-divider>
-
-    <!-- Inclure Aubade Matinale -->
-    <ion-item lines="none">
+  <h3 class="section-title">Annonces</h3>
+  <ion-list class="gillou-list" lines="inset">
+    <ion-item>
       <ion-label>Inclure Aubade Matinale</ion-label>
       <ion-checkbox
         slot="end"
         [checked]="!isAubadeRemoved()"
         (ionChange)="toggleAubade()"
-      >
-      </ion-checkbox>
+        aria-label="Inclure Aubade Matinale"
+      ></ion-checkbox>
     </ion-item>
-
-    <!-- Inclure Mitant des Camps -->
-    <ion-item lines="none">
+    <ion-item>
       <ion-label>Inclure Mitant des Camps</ion-label>
       <ion-checkbox
         slot="end"
         [checked]="!isMitantDesCampsRemoved()"
         (ionChange)="toggleMitantDesCamps()"
+        aria-label="Inclure Mitant des Camps"
       ></ion-checkbox>
     </ion-item>
-
-    <ion-item-divider></ion-item-divider>
-
-    <!-- Réinitialiser Ordre -->
     <ion-item lines="none">
-      <ion-label>Réinitialiser ordre</ion-label>
-      @if(isOrderOriginal()){
-
-      <ion-button slot="end" disabled shape="round">
-        <ion-icon src="assets/icon/check.svg" size="large"></ion-icon>
+      <ion-label>
+        Ordre des annonces
+        <p>{{ isOrderOriginal() ? 'Ordre d\'origine' : 'Ordre personnalisé' }}</p>
+      </ion-label>
+      @if (isOrderOriginal()) {
+      <ion-button class="tonal-button" slot="end" disabled shape="round" aria-label="Ordre d'origine">
+        <ion-icon slot="icon-only" src="assets/icon/check.svg"></ion-icon>
       </ion-button>
       } @else {
-
-      <ion-button slot="end" (click)="resetOrder()" shape="round">
-        <ion-icon src="assets/icon/restart.svg" size="large"></ion-icon>
+      <ion-button class="tonal-button" slot="end" (click)="resetOrder()" shape="round" aria-label="Réinitialiser l'ordre">
+        <ion-icon slot="icon-only" src="assets/icon/restart.svg"></ion-icon>
       </ion-button>
       }
     </ion-item>
+  </ion-list>
 
-    <ion-item-divider></ion-item-divider>
-
-    <ion-item lines="none">
-      <ion-label>Theme</ion-label>
-      <div class="toggle-container">
-        <ion-icon src="assets/icon/light_mode.svg" size="large"></ion-icon>
+  <h3 class="section-title">Affichage</h3>
+  <ion-list class="gillou-list" lines="none">
+    <ion-item>
+      <ion-label>Thème</ion-label>
+      <div class="toggle-container" slot="end">
+        <ion-icon src="assets/icon/light_mode.svg" aria-hidden="true"></ion-icon>
         <ion-toggle
           (ionChange)="toggleTheme()"
           [checked]="isDarkMode()"
           class="ion-toggle-theme"
+          aria-label="Thème sombre"
         ></ion-toggle>
-        <ion-icon src="assets/icon/dark_mode.svg" size="large"></ion-icon>
+        <ion-icon src="assets/icon/dark_mode.svg" aria-hidden="true"></ion-icon>
       </div>
     </ion-item>
   </ion-list>
+  <div class="bottom-space"></div>
 </ion-content>

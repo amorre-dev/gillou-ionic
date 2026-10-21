@@ -8,6 +8,7 @@ const Doudou = (tone: 'sib' | 'mib'): Score => {
 
   return {
     ...DOUDOU_ID,
+    tone,
     timeSignature: '6/8',
     ...sheetData,
   };

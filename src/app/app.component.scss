@@ -1,95 +1,105 @@
+/* Side menu: warm surface, pill items, rounded edge on phones */
+ion-menu {
+  --background: var(--gillou-bg-sidebar);
+}
+
+@media (max-width: 991px) {
+  ion-menu::part(container) {
+    border-radius: 0 var(--gillou-radius-lg) var(--gillou-radius-lg) 0;
+    overflow: hidden;
+  }
+}
+
 ion-menu ion-content {
-  --background: var(--ion-color-primary);
-  display: flex;
-  flex-direction: column;
-  align-items: center; /* Centers horizontally */
+  --background: var(--gillou-bg-sidebar);
+  --padding-start: 12px;
+  --padding-end: 12px;
+  --padding-top: 8px;
+  --padding-bottom: 16px;
 }
 
 .menu-header {
   display: flex;
-  justify-content: center; /* Center horizontally */
-  align-items: center; /* Center vertically */
-  width: 100%; /* Ensure it spans the full width */
-  padding: 20px 0; /* Add vertical padding */
-  box-sizing: border-box; /* Ensure padding doesn't affect width */
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 28px 0 20px;
 }
 
-.menu-image {
-  width: 150px;
-  height: 150px;
+.menu-logo {
+  width: 104px;
+  height: 104px;
+  padding: 14px;
+  border-radius: 32px;
+  background: var(--gillou-logo-tile);
+  box-shadow: var(--gillou-shadow);
 }
 
-/* Ensure the list background is also set to the primary color */
+.menu-logo ion-img {
+  width: 100%;
+  height: 100%;
+}
+
+.menu-title {
+  margin: 0;
+  font-size: 1.35rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: var(--gillou-ink);
+}
+
+.menu-subtitle {
+  margin: 0;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--gillou-ink-muted);
+}
+
 ion-menu ion-list {
-  --background: var(--ion-color-primary);
+  padding: 4px 0;
+  background: transparent;
 }
 
-/* Ensure padding and spacing remain consistent */
-ion-menu.md ion-content,
-ion-menu.ios ion-content {
-  --padding-start: 8px;
-  --padding-end: 8px;
-  --padding-top: 20px;
-  --padding-bottom: 20px;
+ion-menu ion-item {
+  --background: transparent;
+  --background-hover: var(--gillou-nav-hover);
+  --background-focused: var(--gillou-nav-hover);
+  --color: var(--gillou-ink);
+  --padding-start: 14px;
+  --inner-padding-end: 12px;
+  --min-height: 50px;
+  --border-radius: 16px;
+  margin: 3px 0;
+  border-radius: 16px;
+  font-weight: 600;
 }
 
-/* Selected item box in normal background color */
-ion-menu.md ion-item.selected,
-ion-menu.ios ion-item.selected {
-  --background: var(--ion-color-secondary);
+ion-menu ion-item ion-icon {
+  margin-right: 14px;
+  font-size: 22px;
+  color: var(--gillou-ink-muted);
 }
 
-/* Selected item text and icons to be shaded primary color */
-ion-menu.md ion-item.selected ion-label,
-ion-menu.ios ion-item.selected ion-label {
-  color: var(--ion-text-color-step-900);
-  font-weight: bold; /* Optional, to emphasize selected item */
+ion-menu ion-item.selected {
+  --background: var(--gillou-accent);
+  --background-hover: var(--gillou-accent-pressed);
+  --background-focused: var(--gillou-accent-pressed);
+  --color: var(--gillou-on-accent);
+  font-weight: 800;
 }
 
-ion-menu.md ion-item.selected ion-icon,
-ion-menu.ios ion-item.selected ion-icon {
-  color: var(--ion-text-color-step-900);
-}
-
-/* Default item styles */
-ion-menu.md ion-item ion-label,
-ion-menu.ios ion-item ion-label {
-  color: var(--ion-text-color-step-900); /* Default light color for text */
-}
-
-ion-menu.md ion-item ion-icon,
-ion-menu.ios ion-item ion-icon {
-  color: var(--ion-text-color-step-900); /* Default light color for icons */
-}
-
-/* Adjust padding and borders for lists */
-ion-menu.md ion-list,
-ion-menu.ios ion-list {
-  padding: 20px 0;
-  --padding-start: 10px;
-  --padding-end: 10px;
-  background: var(
-    --ion-color-primary
-  ); /* Ensure list background matches menu */
-}
-
-ion-menu.md ion-item,
-ion-menu.ios ion-item {
-  --padding-start: 10px;
-  --padding-end: 10px;
-  border-radius: 4px; /* Slightly rounded corners for a modern look */
-  --background: var(
-    --ion-color-primary
-  ); /* Ensure list background matches menu */
+ion-menu ion-item.selected ion-icon {
+  color: var(--gillou-on-accent);
 }
 
 .menu-footer {
-  text-align: center; /* Center-aligns the text */
+  background: var(--gillou-bg-sidebar);
+  text-align: center;
+  padding: 10px 0 14px;
 }
 
 .footer-text {
-  background: var(--ion-color-primary);
-  font-size: 0.9rem; /* Slightly smaller font for the footer */
-  color: var(--ion-color-medium); /* Muted text color */
-  font-weight: 500; /* Medium weight for better visibility */
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--gillou-ink-muted);
 }

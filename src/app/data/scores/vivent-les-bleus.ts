@@ -9,6 +9,7 @@ const ViventLesBleus = (tone: 'sib' | 'mib'): Score => {
   return {
     ...VIVENT_LES_BLEUS_ID,
     ...sheetData,
+    tone,
     timeSignature: '2/4',
   };
 };

@@ -9,6 +9,7 @@ const Serenade = (tone: 'sib' | 'mib'): Score => {
   return {
     ...SERENADE_ID,
     ...sheetData,
+    tone,
     timeSignature: '2/4',
   };
 };

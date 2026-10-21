@@ -11,6 +11,7 @@ import {
 } from '@ionic/angular';
 import { ScoreHistoryDisplayComponent } from '../../components/score-history/score-history-display.component';
 import { ScoreHistoryService } from 'src/app/services/score-history.service';
+import { HistoryActionsService } from 'src/app/services/history-actions.service';
 
 @Component({
   selector: 'app-score-history',
@@ -31,10 +32,15 @@ import { ScoreHistoryService } from 'src/app/services/score-history.service';
 })
 export class ScoreHistoryPage {
   private readonly scoreHistoryService = inject(ScoreHistoryService);
+  private readonly actions = inject(HistoryActionsService);
 
   readonly isHistoryEmpty = this.scoreHistoryService.isHistoryEmpty;
 
+  saveAsCarnival() {
+    return this.actions.saveCurrentHistory();
+  }
+
   deleteHistory() {
-    this.scoreHistoryService.deleteHistory();
+    return this.actions.confirmClearHistory();
   }
 }

@@ -16,25 +16,41 @@ describe('ScoreRenderedCacheService', () => {
     service = TestBed.inject(ScoreRenderedCacheService);
   });
 
-  it('returns the rendered SVG, distinct per theme and width', () => {
+  it('returns the same SVG for the same width and a different one for another width', () => {
     const score = SCORE_REGISTRY[0].getScore('sib');
-    const light = service.getOrRender(score, 400, false);
+    const first = service.getOrRender(score, 400);
 
-    expect(light).toContain('<svg');
-    expect(service.getOrRender(score, 400, false)).toBe(light);
-    expect(withoutIds(service.getOrRender(score, 400, true))).not.toEqual(withoutIds(light));
-    expect(withoutIds(service.getOrRender(score, 800, false))).not.toEqual(withoutIds(light));
+    expect(first).toContain('<svg');
+    expect(service.getOrRender(score, 400)).toBe(first);
+    expect(withoutIds(service.getOrRender(score, 800))).not.toEqual(withoutIds(first));
+  });
+
+  it('bakes no theme colours into the SVG (the theme is applied by CSS)', () => {
+    const svg = service.getOrRender(SCORE_REGISTRY[0].getScore('sib'), 400);
+    const root = document.documentElement;
+    for (const token of ['--gillou-music-ink', '--gillou-stave-line']) {
+      const value = getComputedStyle(root).getPropertyValue(token).trim();
+      expect(value).not.toBe('');
+      expect(svg.toLowerCase()).not.toContain(value.toLowerCase());
+    }
+  });
+
+  it('renders identically after a width change (rotation), despite VexFlow mutating notes', () => {
+    const entry = SCORE_REGISTRY.find((e) => e.id === 'lion-de-belgique')!;
+    const score = entry.getScore('sib');
+    service.getOrRender(score, 800); // first render mutates stems/beams of this instance
+    const rotated = service.getOrRender(score, 360);
+    const fresh = renderScore(entry.getScore('sib'), 360);
+    expect(withoutIds(rotated)).toEqual(withoutIds(fresh));
   });
 
   it('pre-renders the scores of the current tone', async () => {
     TestBed.inject(ScoreService).setTone('mib');
     await service.initCache();
 
-    const width = TestBed.inject(ScoreService).scores().length;
-    expect(width).toBe(SCORE_REGISTRY.length);
     const score = SCORE_REGISTRY[3].getScore('mib');
-    expect(withoutIds(service.getOrRender(score, 360, false))).toEqual(
-      withoutIds(renderScore(score, 360, false))
+    expect(withoutIds(service.getOrRender(score, 360))).toEqual(
+      withoutIds(renderScore(score, 360))
     );
   });
 });

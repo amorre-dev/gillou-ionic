@@ -1,13 +1,16 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
-    <ion-title>Historique des annonces</ion-title>
-    @if(!isHistoryEmpty()){
+    <ion-title>Historique</ion-title>
+    @if (!isHistoryEmpty()) {
     <ion-buttons slot="end">
-      <ion-button (click)="deleteHistory()">
-        <ion-icon src="assets/icon/delete.svg" size="large"></ion-icon>
+      <ion-button (click)="saveAsCarnival()" aria-label="Enregistrer comme carnaval">
+        <ion-icon slot="icon-only" src="assets/icon/save.svg"></ion-icon>
+      </ion-button>
+      <ion-button (click)="deleteHistory()" aria-label="Tout effacer">
+        <ion-icon slot="icon-only" src="assets/icon/delete.svg"></ion-icon>
       </ion-button>
     </ion-buttons>
     }

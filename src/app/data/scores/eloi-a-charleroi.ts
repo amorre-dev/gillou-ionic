@@ -9,6 +9,7 @@ const EloiACharleroi = (tone: 'sib' | 'mib'): Score => {
   return {
     ...ELOI_A_CHARLEROI_ID,
     ...sheetData,
+    tone,
     timeSignature: '2/4',
   };
 };

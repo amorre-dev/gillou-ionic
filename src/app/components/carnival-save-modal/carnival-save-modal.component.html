@@ -1,0 +1,91 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-title>{{ isEdit() ? 'Modifier le carnaval' : 'Enregistrer le carnaval' }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="cancel()" aria-label="Fermer">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  @if (!isEdit()) {
+  <p class="save-summary">
+    @if (range(); as r) {
+      <strong>{{ entryCount() }}</strong> annonce{{ entryCount() > 1 ? 's' : '' }},
+      @if (r.dayCount > 1) {
+        du {{ r.from | date : 'd MMMM' }} au {{ r.to | date : 'd MMMM yyyy' }} ({{ r.dayCount }} jours)
+      } @else {
+        le {{ r.from | date : 'd MMMM yyyy' }}
+      }
+    } @else {
+      Aucune annonce dans l'historique.
+    }
+  </p>
+  }
+
+  <h3 class="section-title">Carnaval</h3>
+  <ion-list class="gillou-list form-list" lines="inset">
+    <ion-item>
+      <ion-input
+        label="Nom"
+        labelPlacement="stacked"
+        placeholder="Carnaval de Binche"
+        [value]="name()"
+        (ionInput)="onName($event)"
+        autocapitalize="sentences"
+        enterkeyhint="next"
+        required
+      ></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-input
+        label="Lieu"
+        labelPlacement="stacked"
+        placeholder="Binche"
+        [value]="location()"
+        (ionInput)="onLocation($event)"
+        autocapitalize="sentences"
+        enterkeyhint="next"
+      ></ion-input>
+    </ion-item>
+    <ion-item lines="none">
+      <ion-textarea
+        label="Description"
+        labelPlacement="stacked"
+        placeholder="Un rappel pour plus tard : météo, musiciens, moments forts…"
+        [value]="description()"
+        (ionInput)="onDescription($event)"
+        [autoGrow]="true"
+        rows="3"
+        autocapitalize="sentences"
+      ></ion-textarea>
+    </ion-item>
+  </ion-list>
+
+  @if (!isEdit()) {
+  <h3 class="section-title">Historique</h3>
+  <ion-list class="gillou-list" lines="none">
+    <ion-item>
+      <ion-label>
+        Repartir d'un historique vide
+        <p>Les annonces restent consultables dans le carnaval enregistré.</p>
+      </ion-label>
+      <ion-checkbox
+        slot="end"
+        [checked]="clearHistory()"
+        (ionChange)="onClearHistory($event)"
+        aria-label="Repartir d'un historique vide"
+      ></ion-checkbox>
+    </ion-item>
+  </ion-list>
+  }
+
+  <div class="form-actions">
+    <ion-button expand="block" class="primary-button" [disabled]="!canSave()" (click)="save()">
+      <ion-icon slot="start" src="assets/icon/save.svg"></ion-icon>
+      {{ isEdit() ? 'Enregistrer les modifications' : 'Enregistrer' }}
+    </ion-button>
+  </div>
+</ion-content>

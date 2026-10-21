@@ -9,7 +9,9 @@ import {
 } from '../helpers/storage.helper';
 import { Score } from '../types/score.type';
 
-export type Tone = 'sib' | 'mib';
+import { Tone } from '../types/tone.type';
+
+export type { Tone };
 
 const DEFAULT_ORDER: readonly string[] = SCORE_REGISTRY.map((entry) => entry.id);
 

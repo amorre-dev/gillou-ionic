@@ -9,6 +9,7 @@ const QuandMgrandMere = (tone: 'sib' | 'mib'): Score => {
 
   return {
     ...QUAND_MGRAND_MERE_ID,
+    tone,
     timeSignature: '2/4',
     ...sheetData,
   };

@@ -8,6 +8,7 @@ const MitantDesCamps = (tone: 'sib' | 'mib'): Score => {
 
   return {
     ...MITANT_DES_CAMPS_ID,
+    tone,
     timeSignature: '2/4',
     ...sheetData,
   };

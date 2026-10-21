@@ -9,6 +9,7 @@ const TrompetteDesCentGardes = (tone: 'sib' | 'mib'): Score => {
 
   return {
     ...TROMPETTE_DES_CENT_GARDES_ID,
+    tone,
     timeSignature: '2/4',
     ...sheetData,
   };

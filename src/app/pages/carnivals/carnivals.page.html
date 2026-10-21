@@ -1,0 +1,52 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Carnavals</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  @if (isEmpty()) {
+  <div class="empty-container">
+    <div class="empty-icon">
+      <ion-icon src="assets/icon/archive.svg" aria-hidden="true"></ion-icon>
+    </div>
+    <h2 class="text-bold">Aucun carnaval enregistré</h2>
+    <p class="text-small">
+      Depuis l'historique, utilisez le bouton Enregistrer pour garder une trace de chaque carnaval.
+    </p>
+  </div>
+  } @else {
+  <div class="carnival-list">
+    @for (carnival of carnivals(); track carnival.id) {
+    <a class="carnival-card" [routerLink]="['/carnivals', carnival.id]">
+      <div class="carnival-card__body">
+        <h2 class="carnival-card__name">{{ carnival.name }}</h2>
+        @if (carnival.location) {
+        <p class="carnival-card__meta">
+          <ion-icon src="assets/icon/location.svg" aria-hidden="true"></ion-icon>
+          {{ carnival.location }}
+        </p>
+        }
+        @if (rangeOf(carnival); as r) {
+        <p class="carnival-card__meta">
+          <ion-icon src="assets/icon/calendar.svg" aria-hidden="true"></ion-icon>
+          @if (r.dayCount > 1) {
+            {{ r.from | date : 'd MMM' }} – {{ r.to | date : 'd MMM yyyy' }} · {{ r.dayCount }} jours
+          } @else {
+            {{ r.from | date : 'd MMMM yyyy' }}
+          }
+        </p>
+        }
+      </div>
+      <div class="carnival-card__count">
+        <span class="carnival-card__number">{{ carnival.entries.length }}</span>
+        <span class="carnival-card__label">annonce{{ carnival.entries.length > 1 ? 's' : '' }}</span>
+      </div>
+    </a>
+    }
+  </div>
+  }
+</ion-content>

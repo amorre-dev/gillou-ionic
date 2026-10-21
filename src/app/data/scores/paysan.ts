@@ -9,6 +9,7 @@ const Paysan = (tone: 'sib' | 'mib'): Score => {
   return {
     ...PAYSAN_ID,
     ...sheetData,
+    tone,
     timeSignature: '2/4',
   };
 };

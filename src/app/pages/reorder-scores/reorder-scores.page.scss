@@ -1,0 +1,19 @@
+.reorder-hint {
+  margin: 16px calc(var(--gillou-card-margin) + 6px) 10px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--gillou-ink-muted);
+}
+
+.reorder-list {
+  margin-bottom: 28px;
+}
+
+.reorder-list ion-item .number-chip {
+  margin-inline-end: 14px;
+}
+
+.reorder-list ion-reorder {
+  color: var(--gillou-ink-muted);
+  font-size: 24px;
+}

@@ -10,6 +10,7 @@ const SansSouci = (tone: 'sib' | 'mib'): Score => {
   return {
     ...SANS_SOUCIS_ID,
     ...sheetData,
+    tone,
     timeSignature: '2/4',
   };
 };

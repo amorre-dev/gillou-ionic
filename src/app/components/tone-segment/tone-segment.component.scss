@@ -1,0 +1,62 @@
+:host {
+  display: inline-flex;
+  flex: 0 0 auto;
+}
+
+/* Shrink-wrapped pill (Ionic segments stretch to 100% by default) */
+ion-segment {
+  --background: var(--gillou-segment-track);
+  display: inline-flex;
+  width: auto;
+  min-height: 38px;
+  padding: 3px;
+  border-radius: 999px;
+}
+
+ion-segment-button {
+  /* iOS mode: a filled, sliding indicator instead of Material's 2px underline */
+  --indicator-color: var(--gillou-segment-indicator);
+  --indicator-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+  --indicator-transition: transform 220ms cubic-bezier(0.4, 0, 0.2, 1);
+  --background-checked: transparent;
+  --border-radius: 999px;
+  --border-width: 0;
+  --color: var(--gillou-segment-text);
+  --color-checked: var(--gillou-segment-text-checked);
+  --padding-start: 12px;
+  --padding-end: 12px;
+  --margin-start: 0;
+  --margin-end: 0;
+  --margin-top: 0;
+  --margin-bottom: 0;
+  flex: 0 0 auto;
+  min-width: 0;
+  min-height: 32px;
+  height: 32px;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+ion-segment-button::part(indicator-background) {
+  border-radius: 999px;
+}
+
+ion-segment-button ion-icon {
+  font-size: 24px;
+}
+
+ion-segment-button ion-label {
+  margin: 0 0 0 6px;
+  font-size: 0.95rem;
+}
+
+ion-segment.compact ion-segment-button {
+  --padding-start: 10px;
+  --padding-end: 10px;
+}
+
+/* Unselected instrument is dimmed, selected is full strength */
+ion-segment-button:not(.segment-button-checked) ion-icon {
+  opacity: 0.6;
+}

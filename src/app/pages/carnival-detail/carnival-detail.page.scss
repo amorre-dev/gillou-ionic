@@ -1,0 +1,92 @@
+.info-card {
+  margin: 16px var(--gillou-card-margin) 0;
+  padding: 18px 20px;
+  border: 1px solid var(--gillou-outline);
+  border-radius: var(--gillou-radius-lg);
+  background: var(--gillou-surface);
+  box-shadow: var(--gillou-shadow);
+  color: var(--gillou-ink);
+}
+
+.info-card__name {
+  margin: 0 0 6px;
+  font-size: 1.3rem;
+  font-weight: 800;
+  overflow-wrap: anywhere;
+}
+
+.info-card__meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 4px 0 0;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--gillou-ink-muted);
+}
+
+.info-card__meta span {
+  display: inline-block;
+}
+
+.info-card__meta span::first-letter {
+  text-transform: uppercase;
+}
+
+.info-card__meta ion-icon {
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.info-card__description {
+  margin: 14px 0 0;
+  padding: 12px 14px;
+  border-radius: var(--gillou-radius-sm);
+  background: var(--gillou-surface-muted);
+  font-size: 0.95rem;
+  line-height: 1.45;
+  white-space: pre-wrap;
+}
+
+.info-card__saved {
+  margin: 12px 0 0;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--gillou-ink-muted);
+}
+
+.summary-list ion-item .number-chip {
+  margin-inline-end: 14px;
+}
+
+.summary-count {
+  min-width: 2.2rem;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--gillou-tonal);
+  font-weight: 800;
+  text-align: center;
+}
+
+/* Day lists inside the page should not add their own top heading spacing twice */
+app-score-history-display {
+  display: block;
+}
+
+.not-found {
+  padding: 48px 32px;
+  text-align: center;
+  color: var(--gillou-ink);
+}
+
+.text-bold {
+  margin: 0 0 6px;
+  font-size: 1.2rem;
+  font-weight: 800;
+}
+
+.text-small {
+  margin: 0;
+  font-size: 0.92rem;
+  color: var(--gillou-ink-muted);
+}

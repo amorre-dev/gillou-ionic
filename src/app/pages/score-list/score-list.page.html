@@ -1,89 +1,55 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
-    <ion-title>Annonces {{ tone() === 'sib' ? 'Si♭' : 'Mi♭' }}</ion-title>
+    <ion-title>Annonces</ion-title>
     <ion-buttons slot="end">
-      @if (isToggleButtonOk()) {
-      <div class="toggle-container">
-        <ion-icon
-          class="icon-left {{ getIconClass(tone() === 'sib') }}"
-          src="assets/icon/trumpet.svg"
-          size="large"
-        ></ion-icon>
-        <ion-toggle
-          (ionChange)="toggleTone($event)"
-          [checked]="tone() === 'mib'"
-          aria-label="Tonalité"
-        ></ion-toggle>
-        <ion-icon
-          class="icon-right {{ getIconClass(tone() === 'mib') }}"
-          src="assets/icon/clarinet.svg"
-          size="large"
-        ></ion-icon>
-      </div>
-      } @else { @if (tone() === 'sib') {
-      <ion-button (click)="switchTone('mib')" aria-label="Passer en Mi♭">
-        <ion-icon src="assets/icon/trumpet.svg" size="large"></ion-icon>
-      </ion-button>
-      } @else {
-      <ion-button (click)="switchTone('sib')" aria-label="Passer en Si♭">
-        <ion-icon src="assets/icon/clarinet.svg" size="large"></ion-icon>
-      </ion-button>
-      } }
+      <app-tone-segment [compact]="!isToggleButtonOk()"></app-tone-segment>
       <ion-button (click)="openModal()" aria-label="Historique">
-        <ion-icon src="assets/icon/history.svg" size="large"></ion-icon>
+        <ion-icon slot="icon-only" src="assets/icon/history.svg"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-list>
+  <div class="score-list">
     @for (score of scores(); track score.id) {
-    <div>
-      <ion-item lines="none" style="padding-left: 10px; padding-right: 10px">
-        <ion-label>{{ score.number }} - {{ score.title }}</ion-label>
-        <ion-button
-          slot="end"
-          shape="round"
-          color="secondary"
-          (click)="removeScoreFromHistory(score.id)"
-          aria-label="Retirer une annonce"
-        >
-          <ion-icon
-            slot="icon-only"
-            name="remove"
-            class="in-button-icon"
-          ></ion-icon>
-        </ion-button>
-        <ion-badge
-          slot="end"
-          [style.background-color]="getBadgeBackgroundColor(getHistoryOccurrences(score.id))"
-          [style.color]="getBadgeTextColor(getHistoryOccurrences(score.id))"
-          class="custom-badge"
-        >
-          {{ getHistoryOccurrences(score.id) }}
-        </ion-badge>
-        <ion-button
-          slot="end"
-          shape="round"
-          color="secondary"
-          (click)="addScoreToHistory(score.id, score.title, score.number)"
-          aria-label="Ajouter une annonce"
-        >
-          <ion-icon
-            slot="icon-only"
-            name="add"
-            class="in-button-icon"
-          ></ion-icon>
-        </ion-button>
-      </ion-item>
-      <ion-item>
-        <app-music-display [score]="score"></app-music-display>
-      </ion-item>
-    </div>
+    <article class="score-card">
+      <div class="score-card__header">
+        <h2 class="score-card__title">
+          <span class="number-chip">{{ score.number }}</span>
+          <span class="score-card__name">{{ score.title }}</span>
+        </h2>
+        <div class="score-card__actions">
+          <ion-button
+            class="tonal-button"
+            shape="round"
+            (click)="removeScoreFromHistory(score.id)"
+            aria-label="Retirer une annonce"
+          >
+            <ion-icon slot="icon-only" name="remove"></ion-icon>
+          </ion-button>
+          <ion-badge
+            class="count-badge"
+            [style.background-color]="getBadgeBackgroundColor(getHistoryOccurrences(score.id))"
+            [style.color]="getBadgeTextColor(getHistoryOccurrences(score.id))"
+          >
+            {{ getHistoryOccurrences(score.id) }}
+          </ion-badge>
+          <ion-button
+            class="tonal-button"
+            shape="round"
+            (click)="addScoreToHistory(score.id, score.title, score.number)"
+            aria-label="Ajouter une annonce"
+          >
+            <ion-icon slot="icon-only" name="add"></ion-icon>
+          </ion-button>
+        </div>
+      </div>
+      <app-music-display [score]="score"></app-music-display>
+    </article>
     }
-  </ion-list>
+  </div>
 </ion-content>

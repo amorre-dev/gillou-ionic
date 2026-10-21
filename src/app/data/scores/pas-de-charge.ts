@@ -9,6 +9,7 @@ const PasDeCharge = (tone: 'sib' | 'mib'): Score => {
   return {
     ...PAS_DE_CHARGE_ID,
     ...sheetData,
+    tone,
     timeSignature: '2/4',
   };
 };

@@ -1,0 +1,26 @@
+app-music-display {
+  display: block;
+  width: 100%;
+}
+
+.music-canvas {
+  width: 100%;
+  line-height: 0;
+}
+
+.music-canvas svg {
+  display: block;
+  max-width: 100%;
+}
+
+/* VexFlow tags every drawn group with a vf-* class; colour them from the theme tokens.
+   Stylesheet rules win over the SVG's fill/stroke attributes, and paths with fill="none" stay unfilled. */
+.music-canvas svg [class*='vf-'] {
+  fill: var(--gillou-music-ink);
+  stroke: var(--gillou-music-ink);
+}
+
+.music-canvas svg .vf-stave {
+  fill: var(--gillou-stave-line);
+  stroke: var(--gillou-stave-line);
+}

@@ -1,8 +1,7 @@
 export function generateCacheKey(
   scoreId: string,
   scoreKeySignature: string,
-  platformWidth: number,
-  isDarkMode: boolean
+  width: number
 ): string {
-  return `${scoreId}-${scoreKeySignature}-${platformWidth}-${isDarkMode}`;
+  return `${scoreId}-${scoreKeySignature}-${width}`;
 }

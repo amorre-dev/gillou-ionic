@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { provideIonicAngular } from '@ionic/angular';
 import { ScoreListPage } from './score-list.page';
+import { BADGE_COLORS, BADGE_MAX } from 'src/theme/badge.theme';
 
 describe('ScoreListPage', () => {
   let component: ScoreListPage;
@@ -40,10 +41,10 @@ describe('ScoreListPage badges', () => {
   });
 
   it('colours badges from 0 to 10 and wraps beyond', () => {
-    expect(page.getBadgeBackgroundColor(0)).toBe('#fff1e0');
-    expect(page.getBadgeBackgroundColor(10)).toBe('#000000');
-    expect(page.getBadgeBackgroundColor(11)).toBe('#000000');
-    expect(page.getBadgeTextColor(3)).toBe('#000000');
-    expect(page.getBadgeTextColor(12)).toBe('#ffd7a3');
+    expect(page.getBadgeBackgroundColor(0)).toBe(BADGE_COLORS[0].code);
+    expect(page.getBadgeBackgroundColor(10)).toBe(BADGE_MAX.code);
+    expect(page.getBadgeBackgroundColor(11)).toBe(BADGE_MAX.code);
+    expect(page.getBadgeTextColor(3)).toBe(BADGE_COLORS[3].text);
+    expect(page.getBadgeTextColor(12)).toBe(BADGE_COLORS[2].code);
   });
 });

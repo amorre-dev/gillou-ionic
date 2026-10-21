@@ -1,0 +1,67 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/carnivals" text=""></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ carnival()?.name ?? 'Carnaval' }}</ion-title>
+    @if (carnival()) {
+    <ion-buttons slot="end">
+      <ion-button (click)="edit()" aria-label="Modifier">
+        <ion-icon slot="icon-only" src="assets/icon/edit.svg"></ion-icon>
+      </ion-button>
+      <ion-button (click)="remove()" aria-label="Supprimer">
+        <ion-icon slot="icon-only" src="assets/icon/delete.svg"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    }
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  @if (carnival(); as c) {
+  <section class="info-card">
+    <h2 class="info-card__name">{{ c.name }}</h2>
+    @if (c.location) {
+    <p class="info-card__meta">
+      <ion-icon src="assets/icon/location.svg" aria-hidden="true"></ion-icon>
+      {{ c.location }}
+    </p>
+    }
+    @if (range(); as r) {
+    <p class="info-card__meta">
+      <ion-icon src="assets/icon/calendar.svg" aria-hidden="true"></ion-icon>
+      <span>
+        @if (r.dayCount > 1) {
+          du {{ r.from | date : 'EEEE d MMMM' }} au {{ r.to | date : 'EEEE d MMMM yyyy' }}
+        } @else {
+          {{ r.from | date : 'EEEE d MMMM yyyy' }}
+        }
+      </span>
+    </p>
+    }
+    @if (c.description) {
+    <p class="info-card__description">{{ c.description }}</p>
+    }
+    <p class="info-card__saved">Enregistré le {{ c.savedAt | date : 'd MMMM yyyy à HH:mm' }}</p>
+  </section>
+
+  <h3 class="section-title">Résumé · {{ c.entries.length }} annonce{{ c.entries.length > 1 ? 's' : '' }}</h3>
+  <ion-list class="gillou-list summary-list" lines="inset">
+    @for (row of summary(); track row.scoreId) {
+    <ion-item>
+      <span class="number-chip" slot="start">{{ row.scoreNumber }}</span>
+      <ion-label>{{ row.scoreTitle }}</ion-label>
+      <span class="summary-count" slot="end">{{ row.count }}</span>
+    </ion-item>
+    }
+  </ion-list>
+
+  <h3 class="section-title">Jour par jour</h3>
+  <app-score-history-display [entries]="c.entries" [readonly]="true"></app-score-history-display>
+  } @else {
+  <div class="not-found">
+    <h2 class="text-bold">Carnaval introuvable</h2>
+    <p class="text-small">Il a peut-être été supprimé.</p>
+  </div>
+  }
+</ion-content>

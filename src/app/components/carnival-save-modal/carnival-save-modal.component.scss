@@ -1,0 +1,17 @@
+.save-summary {
+  margin: 18px calc(var(--gillou-card-margin) + 6px) 0;
+  font-size: 0.95rem;
+  color: var(--gillou-ink-muted);
+}
+
+.save-summary strong {
+  color: var(--gillou-ink);
+}
+
+.form-list ion-item {
+  --inner-padding-end: 18px;
+}
+
+.form-actions {
+  padding: 22px var(--gillou-card-margin) 32px;
+}

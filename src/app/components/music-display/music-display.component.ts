@@ -3,6 +3,7 @@ import {
   Component,
   ElementRef,
   OnDestroy,
+  ViewEncapsulation,
   effect,
   inject,
   input,
@@ -12,20 +13,21 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Gesture, GestureController, Platform } from '@ionic/angular';
 import { Score } from '../../types/score.type';
-import { ThemeService } from '../../services/theme.service';
 import { ScoreRenderedCacheService } from '../../services/score-rendered-cache.service';
 import { ScoreHistoryService } from '../../services/score-history.service';
+import { scoreSheetWidth } from '../../helpers/layout.helper';
 
 const DOUBLE_TAP_THRESHOLD_MS = 500;
 
 @Component({
   selector: 'app-music-display',
   standalone: true,
-  template: ` <div #musicCanvas></div> `,
+  template: ` <div #musicCanvas class="music-canvas"></div> `,
   styleUrls: ['./music-display.component.scss'],
+  // The SVG is injected as innerHTML, so its styles must not be scoped.
+  encapsulation: ViewEncapsulation.None,
 })
 export class MusicDisplayComponent implements AfterViewInit, OnDestroy {
-  private readonly themeService = inject(ThemeService);
   private readonly platform = inject(Platform);
   private readonly scoreCacheService = inject(ScoreRenderedCacheService);
   private readonly gestureCtrl = inject(GestureController);
@@ -35,7 +37,8 @@ export class MusicDisplayComponent implements AfterViewInit, OnDestroy {
 
   private readonly musicCanvas =
     viewChild<ElementRef<HTMLDivElement>>('musicCanvas');
-  private readonly screenWidth = signal(this.platform.width());
+  /** Bumped on every window resize (also fires on rotation) so the effect re-measures. */
+  private readonly viewportWidth = signal(this.platform.width());
 
   private gesture?: Gesture;
   private lastTapAt = 0;
@@ -44,19 +47,20 @@ export class MusicDisplayComponent implements AfterViewInit, OnDestroy {
     // Window resize also fires on device rotation, so one listener covers both.
     this.platform.resize
       .pipe(takeUntilDestroyed())
-      .subscribe(() => this.screenWidth.set(this.platform.width()));
+      .subscribe(() => this.viewportWidth.set(this.platform.width()));
 
-    // Re-renders whenever the score, the theme, the width or the canvas element changes.
+    // Re-renders whenever the score, the viewport or the canvas element changes (theme is CSS-only).
     effect(() => {
       const canvas = this.musicCanvas();
-      const svg = this.scoreCacheService.getOrRender(
-        this.score(),
-        this.screenWidth(),
-        this.themeService.isDarkMode()
-      );
-      if (canvas) {
-        canvas.nativeElement.innerHTML = svg;
+      const score = this.score();
+      const viewportWidth = this.viewportWidth();
+      if (!canvas) {
+        return;
       }
+      // Render at the real width of the card, falling back to the viewport-derived width.
+      const width =
+        canvas.nativeElement.clientWidth || scoreSheetWidth(viewportWidth);
+      canvas.nativeElement.innerHTML = this.scoreCacheService.getOrRender(score, width);
     });
   }
 

@@ -3,29 +3,32 @@ import { Score } from '../types/score.type';
 import { Measure } from '../types/measure.type';
 
 const STAVE_HEIGHT = 120;
-const LEFT_MARGIN = 10;
-const RIGHT_MARGIN = 10;
+const LEFT_MARGIN = 4;
+const RIGHT_MARGIN = 4;
+/** Space kept around the drawn content when cropping the canvas. */
+const CROP_PADDING = 3;
 
-/** Renders a score as an SVG string sized for the given screen width. */
-export function renderScore(
-  score: Score,
-  screenWidth: number,
-  isDarkMode: boolean
-): string {
+
+/**
+ * Renders a score as an SVG string sized for the given width.
+ * Colours are not baked in: music-display.component.scss colours the `vf-*` groups
+ * from the theme tokens, so the same SVG serves both themes.
+ */
+export function renderScore(score: Score, screenWidth: number): string {
   const availableWidth = screenWidth - LEFT_MARGIN - RIGHT_MARGIN;
   const keyWidth = calculateKeyWidth(score.keySignature);
   const staveWidths = calculateWidths(score.measures, availableWidth - keyWidth);
   staveWidths[0] += keyWidth;
 
+  // Rendered inside the document (off-screen) so the drawn bounds can be measured for cropping.
+  const host = document.createElement('div');
+  host.style.cssText = 'position:absolute;left:-10000px;top:0;visibility:hidden;pointer-events:none;';
+  document.body.appendChild(host);
   const div = document.createElement('div');
+  host.appendChild(div);
   const renderer = new VFRenderer(div, VFRenderer.Backends.SVG);
   renderer.resize(screenWidth, STAVE_HEIGHT);
   const context = renderer.getContext();
-
-  if (isDarkMode) {
-    context.setStrokeStyle('#ffffff');
-    context.setFillStyle('#ffffff');
-  }
 
   const [beatsPerMeasure, beatValue] = score.timeSignature
     .split('/')
@@ -62,7 +65,29 @@ export function renderScore(
     x += staveWidth;
   });
 
-  return div.innerHTML;
+  cropToContent(div.querySelector('svg'), screenWidth);
+  const svg = div.innerHTML;
+  host.remove();
+  return svg;
+}
+
+/**
+ * VexFlow draws on a fixed-height canvas with empty bands above and below the stave.
+ * Trim the viewBox to what was actually drawn so cards stay as short as possible.
+ */
+function cropToContent(svg: SVGSVGElement | null, width: number) {
+  if (!svg || typeof svg.getBBox !== 'function') {
+    return;
+  }
+  const box = svg.getBBox();
+  if (!(box.height > 0)) {
+    return;
+  }
+  const top = Math.max(0, Math.floor(box.y) - CROP_PADDING);
+  const height = Math.ceil(box.y + box.height) + CROP_PADDING - top;
+  svg.setAttribute('viewBox', `0 ${top} ${width} ${height}`);
+  svg.setAttribute('height', String(height));
+  svg.style.height = `${height}px`;
 }
 
 /** Horizontal room taken by clef, time signature and key signature on the first stave. */

@@ -10,6 +10,7 @@ const VosArezInAubade = (tone: 'sib' | 'mib'): Score => {
   return {
     ...VOS_AREZ_IN_AUBADE_ID,
     ...sheetData,
+    tone,
     timeSignature: '2/4',
   };
 };

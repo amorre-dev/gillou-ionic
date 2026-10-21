@@ -7,26 +7,22 @@ import {
   IonMenuButton,
   IonTitle,
   IonContent,
-  IonList,
-  IonItem,
   IonButton,
   IonIcon,
-  IonLabel,
   IonBadge,
-  IonToggle,
   ModalController,
   Platform,
-  ToggleCustomEvent,
 } from '@ionic/angular';
 import { addIcons } from 'ionicons';
 import { add, remove } from 'ionicons/icons';
 import { MusicDisplayComponent } from 'src/app/components/music-display/music-display.component';
-import { ScoreService, Tone } from 'src/app/services/score.service';
-import { BADGE_COLORS } from 'src/theme/badge.theme';
+import { ToneSegmentComponent } from 'src/app/components/tone-segment/tone-segment.component';
+import { ScoreService } from 'src/app/services/score.service';
+import { BADGE_COLORS, BADGE_MAX } from 'src/theme/badge.theme';
 import { ScoreHistoryModalComponent } from 'src/app/components/score-history/score-history-modal/score-history-modal.component';
 import { ScoreHistoryService } from 'src/app/services/score-history.service';
 
-/** Below this width (Pixel 8 viewport) the toolbar shows a single tone button instead of the toggle. */
+/** Below this width (Pixel 8 viewport) the toolbar tone chooser shows icons only. */
 const TOGGLE_MIN_WIDTH = 412;
 
 @Component({
@@ -35,12 +31,8 @@ const TOGGLE_MIN_WIDTH = 412;
   styleUrls: ['./score-list.page.scss'],
   standalone: true,
   imports: [
-    IonToggle,
     IonBadge,
-    IonLabel,
     IonButton,
-    IonItem,
-    IonList,
     IonHeader,
     IonToolbar,
     IonButtons,
@@ -48,6 +40,7 @@ const TOGGLE_MIN_WIDTH = 412;
     IonTitle,
     IonContent,
     MusicDisplayComponent,
+    ToneSegmentComponent,
     IonIcon,
   ],
 })
@@ -58,7 +51,6 @@ export class ScoreListPage {
   private readonly scoreHistoryService = inject(ScoreHistoryService);
 
   readonly scores = this.scoreService.scores;
-  readonly tone = this.scoreService.tone;
   readonly pageWidth = signal(this.platform.width());
 
   constructor() {
@@ -71,6 +63,9 @@ export class ScoreListPage {
   async openModal() {
     const modal = await this.modalCtrl.create({
       component: ScoreHistoryModalComponent,
+      cssClass: 'history-sheet',
+      breakpoints: [0, 0.6, 1],
+      initialBreakpoint: 0.6,
     });
     await modal.present();
   }
@@ -87,31 +82,19 @@ export class ScoreListPage {
     return this.scoreHistoryService.getOccurrences(scoreId);
   }
 
-  switchTone(tone: Tone) {
-    this.scoreService.setTone(tone);
-  }
-
-  toggleTone(event: ToggleCustomEvent) {
-    this.switchTone(event.detail.checked ? 'mib' : 'sib');
-  }
-
   isToggleButtonOk() {
     return this.pageWidth() >= TOGGLE_MIN_WIDTH;
   }
 
-  getIconClass(toggled: boolean): string {
-    return toggled ? 'large' : 'medium';
-  }
-
   getBadgeBackgroundColor(value: number): string {
     const foundColor = BADGE_COLORS.find((c) => c.key === value);
-    return foundColor ? foundColor.code : '#000000';
+    return foundColor ? foundColor.code : BADGE_MAX.code;
   }
 
   getBadgeTextColor(value: number): string {
     const foundColor = BADGE_COLORS.find((c) => c.key === value % 10);
     if (!foundColor) {
-      return '#ffffff';
+      return BADGE_MAX.text;
     }
     return value < 10 ? foundColor.text : foundColor.code;
   }

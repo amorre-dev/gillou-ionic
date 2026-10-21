@@ -9,6 +9,7 @@ const Classe = (tone: 'sib' | 'mib'): Score => {
   return {
     ...CLASSE_ID,
     ...sheetData,
+    tone,
     timeSignature: '2/4',
   };
 };

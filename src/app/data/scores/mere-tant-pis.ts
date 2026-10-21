@@ -9,6 +9,7 @@ const MereTantPis = (tone: 'sib' | 'mib'): Score => {
   return {
     ...MERE_TANT_PIS_ID,
     ...sheetData,
+    tone,
     timeSignature: '2/4',
   };
 };

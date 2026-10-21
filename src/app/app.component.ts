@@ -16,11 +16,14 @@ import {
   IonFooter,
 } from '@ionic/angular';
 import { Capacitor } from '@capacitor/core';
-import { StatusBar } from '@capacitor/status-bar';
+import { StatusBar, Style } from '@capacitor/status-bar';
 import { ScoreRenderedCacheService } from './services/score-rendered-cache.service';
+import { ThemeService } from './services/theme.service';
+import { EasterEggService } from './services/easter-egg.service';
 
 const ASSET_FOLDER = 'assets/icon/';
-const PRIMARY_COLOR = '#fc861d';
+/** Keep in sync with --ion-color-primary in src/theme/variables.scss */
+const PRIMARY_COLOR = '#e9a262';
 
 @Component({
   selector: 'app-root',
@@ -46,6 +49,10 @@ const PRIMARY_COLOR = '#fc861d';
 })
 export class AppComponent implements OnInit {
   private readonly scoreRenderedCacheService = inject(ScoreRenderedCacheService);
+  /** Instantiated here so the stored/system theme is applied at startup, whatever the first page is. */
+  private readonly themeService = inject(ThemeService);
+  /** Instantiated here so it listens from the first announcement on. */
+  private readonly easterEggs = inject(EasterEggService);
 
   readonly appPages = [
     {
@@ -64,6 +71,11 @@ export class AppComponent implements OnInit {
       icon: ASSET_FOLDER + 'history.svg',
     },
     {
+      title: 'Carnavals',
+      url: '/carnivals',
+      icon: ASSET_FOLDER + 'archive.svg',
+    },
+    {
       title: 'Options',
       url: '/settings',
       icon: ASSET_FOLDER + 'settings.svg',
@@ -71,10 +83,14 @@ export class AppComponent implements OnInit {
   ];
 
   ngOnInit(): void {
+    this.themeService.isDarkMode(); // touch so the fields are not flagged as unused
+    void this.easterEggs;
     if (Capacitor.isNativePlatform()) {
-      StatusBar.setBackgroundColor({ color: PRIMARY_COLOR }).catch((error) =>
-        console.warn('Could not set the status bar color', error)
-      );
+      // The header is a light pastel in both themes, so the status bar always needs dark icons.
+      Promise.all([
+        StatusBar.setStyle({ style: Style.Light }),
+        StatusBar.setBackgroundColor({ color: PRIMARY_COLOR }),
+      ]).catch((error) => console.warn('Could not style the status bar', error));
     }
     this.scoreRenderedCacheService
       .initCache()

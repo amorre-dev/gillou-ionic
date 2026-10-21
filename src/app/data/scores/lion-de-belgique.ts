@@ -9,6 +9,7 @@ const LionDeBelgique = (tone: 'sib' | 'mib'): Score => {
   return {
     ...LION_DE_BELGIQUE_ID,
     ...sheetData,
+    tone,
     timeSignature: '2/4',
   };
 };

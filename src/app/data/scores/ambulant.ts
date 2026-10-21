@@ -9,6 +9,7 @@ const Ambulant = (tone: 'sib' | 'mib'): Score => {
   return {
     ...AMBULANT_ID,
     ...sheetData,
+    tone,
     timeSignature: '2/4',
   };
 };

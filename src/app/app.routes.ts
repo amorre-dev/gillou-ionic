@@ -26,6 +26,18 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'carnivals',
+    loadComponent: () =>
+      import('./pages/carnivals/carnivals.page').then((m) => m.CarnivalsPage),
+  },
+  {
+    path: 'carnivals/:id',
+    loadComponent: () =>
+      import('./pages/carnival-detail/carnival-detail.page').then(
+        (m) => m.CarnivalDetailPage
+      ),
+  },
+  {
     path: 'settings',
     loadComponent: () => import('./pages/settings/settings.page').then( m => m.SettingsPage)
   },

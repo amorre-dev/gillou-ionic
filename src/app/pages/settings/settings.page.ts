@@ -9,19 +9,18 @@ import {
   IonLabel,
   IonIcon,
   IonToggle,
-  IonItemDivider,
   IonCheckbox,
   IonButton,
   IonButtons,
   IonMenuButton,
-  ToggleCustomEvent,
 } from '@ionic/angular';
-import { ScoreService, Tone } from 'src/app/services/score.service';
+import { ScoreService } from 'src/app/services/score.service';
 import {
   AUBADE_MATINALE_ID,
   MITANT_DES_CAMPS_ID,
 } from 'src/app/data/identifiers/score-identifiers';
 import { ThemeService } from 'src/app/services/theme.service';
+import { ToneSegmentComponent } from 'src/app/components/tone-segment/tone-segment.component';
 
 @Component({
   selector: 'app-settings',
@@ -31,7 +30,6 @@ import { ThemeService } from 'src/app/services/theme.service';
   imports: [
     IonButton,
     IonCheckbox,
-    IonItemDivider,
     IonToggle,
     IonIcon,
     IonLabel,
@@ -43,23 +41,15 @@ import { ThemeService } from 'src/app/services/theme.service';
     IonToolbar,
     IonButtons,
     IonMenuButton,
+    ToneSegmentComponent,
   ],
 })
 export class SettingsPage {
   private readonly scoreService = inject(ScoreService);
   private readonly themeService = inject(ThemeService);
 
-  readonly tone = this.scoreService.tone;
   readonly isOrderOriginal = this.scoreService.isOrderOriginal;
   readonly isDarkMode = this.themeService.isDarkMode;
-
-  switchTone(tone: Tone) {
-    this.scoreService.setTone(tone);
-  }
-
-  toggleTone(event: ToggleCustomEvent) {
-    this.switchTone(event.detail.checked ? 'mib' : 'sib');
-  }
 
   isAubadeRemoved(): boolean {
     return this.scoreService.isScoreRemoved(AUBADE_MATINALE_ID.id);

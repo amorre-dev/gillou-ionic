@@ -8,6 +8,7 @@ const AubadeMatinale = (tone: 'sib' | 'mib'): Score => {
 
   return {
     ...AUBADE_MATINALE_ID,
+    tone,
     timeSignature: '2/4',
     ...sheetData,
   };

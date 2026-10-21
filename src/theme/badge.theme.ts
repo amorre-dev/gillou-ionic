@@ -1,17 +1,27 @@
-export const BADGE_COLORS = [
-  // 0–4: from a light orange-tinted color to your primary orange
-  { key: 0, code: '#fff1e0', text: '#000000' }, // Light orange-tinted
-  { key: 1, code: '#ffe4c2', text: '#000000' },
-  { key: 2, code: '#ffd7a3', text: '#000000' },
-  { key: 3, code: '#ffc982', text: '#000000' },
-  { key: 4, code: '#ffba61', text: '#000000' },
-  // Midpoint (5): your primary color
-  { key: 5, code: '#fc861d', text: '#000000' },
-  // 6–10: transition from deep orange/red into black
-  // 6–10: Smoother transition from orange to black
-  { key: 6, code: '#f25f20', text: '#ffffff' }, // More reddish-orange
-  { key: 7, code: '#e13b26', text: '#ffffff' }, // Deeper red
-  { key: 8, code: '#c9202e', text: '#ffffff' }, // Darker red
-  { key: 9, code: '#7a0e19', text: '#ffffff' }, // Very dark red
-  { key: 10, code: '#000000', text: '#ffffff' }, // Black
+/**
+ * Announcement-count badge colours, from a quiet cream (0) through the brand apricot (5)
+ * to a deep plum (10). Key 5 is the accent token. Values above 10 reuse the darkest background with the ramp colour as text.
+ */
+export interface BadgeColor {
+  key: number;
+  /** Background. */
+  code: string;
+  /** Readable text colour on that background. */
+  text: string;
+}
+
+export const BADGE_COLORS: readonly BadgeColor[] = [
+  { key: 0, code: '#fbf1e6', text: '#5a3a26' },
+  { key: 1, code: '#f9e3cc', text: '#5a3a26' },
+  { key: 2, code: '#f7d4b1', text: '#4a2e1c' },
+  { key: 3, code: '#f6c596', text: '#4a2e1c' },
+  { key: 4, code: '#f1bb86', text: '#3b2312' },
+  { key: 5, code: '#e9a262', text: '#3b2312' },
+  { key: 6, code: '#e58e6b', text: '#fff6ee' },
+  { key: 7, code: '#d6766a', text: '#fff6ee' },
+  { key: 8, code: '#bf5f68', text: '#fff6ee' },
+  { key: 9, code: '#8e4a5e', text: '#fff6ee' },
+  { key: 10, code: '#4a2f3a', text: '#fff6ee' },
 ];
+
+export const BADGE_MAX = BADGE_COLORS[BADGE_COLORS.length - 1];

@@ -1,6 +1,7 @@
 import { computed, Injectable, signal } from '@angular/core';
 import { ScoreHistory } from '../types/score-history.type';
 import { v4 as uuidv4 } from 'uuid';
+import { Observable, Subject } from 'rxjs';
 import { readJson, writeJson } from '../helpers/storage.helper';
 
 const isScoreHistoryArray = (value: unknown): value is ScoreHistory[] =>
@@ -29,6 +30,11 @@ export class ScoreHistoryService {
     [...this.scoreHistory()].reverse()
   );
   /** scoreId -> number of times it was announced. */
+  private readonly added = new Subject<{ entry: ScoreHistory; before: ScoreHistory[] }>();
+  /** Emits every new announcement together with the history as it was just before. */
+  readonly added$: Observable<{ entry: ScoreHistory; before: ScoreHistory[] }> =
+    this.added.asObservable();
+
   readonly occurrences = computed(() => {
     const counts = new Map<string, number>();
     for (const item of this.scoreHistory()) {
@@ -38,16 +44,16 @@ export class ScoreHistoryService {
   });
 
   addToHistory(scoreId: string, scoreTitle: string, scoreNumber: number) {
-    this.setHistory([
-      ...this.scoreHistory(),
-      {
-        historyId: uuidv4(),
-        scoreId,
-        scoreTitle,
-        scoreNumber,
-        date: new Date().toISOString(),
-      },
-    ]);
+    const before = this.scoreHistory();
+    const entry: ScoreHistory = {
+      historyId: uuidv4(),
+      scoreId,
+      scoreTitle,
+      scoreNumber,
+      date: new Date().toISOString(),
+    };
+    this.setHistory([...before, entry]);
+    this.added.next({ entry, before });
   }
 
   removeFromHistory(historyId: string) {

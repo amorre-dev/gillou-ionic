@@ -9,6 +9,7 @@ const JuifErrant = (tone: 'sib' | 'mib'): Score => {
   return {
     ...JUIF_ERRANT_ID,
     ...sheetData,
+    tone,
     timeSignature: '2/4',
   };
 };

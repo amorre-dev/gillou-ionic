@@ -9,6 +9,7 @@ const Cavalcade = (tone: 'sib' | 'mib'): Score => {
   return {
     ...CAVALCADE_ID,
     ...sheetData,
+    tone,
     timeSignature: '2/4',
   };
 };

@@ -10,6 +10,7 @@ const PostillonDeLongjumeau = (tone: 'sib' | 'mib'): Score => {
   return {
     ...POSTILLON_DE_LONGJUMEAU_ID,
     ...sheetData,
+    tone,
     timeSignature: '6/8',
   };
 };

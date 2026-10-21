@@ -12,6 +12,7 @@ const PetitJeuneHommeDeBinche = (tone: 'sib' | 'mib'): Score => {
   return {
     ...PETIT_JEUNE_HOMME_DE_BINCHE_ID,
     ...sheetData,
+    tone,
     timeSignature: '2/4',
   };
 };

@@ -1,27 +1,35 @@
 @if (scoreHistory().length > 0) {
-<ion-list lines="full">
-  @for (historyItem of scoreHistory(); track historyItem.historyId) {
-  <ion-item>
-    <ion-label>
-      <h2>{{ historyItem.scoreNumber }} - {{ historyItem.scoreTitle }}</h2>
-      <p>{{ historyItem.date | date : "dd/MM/yyyy - HH:mm:ss" }}</p>
-    </ion-label>
-    <ion-icon
-      src="assets/icon/delete.svg"
-      color="primary"
-      slot="end"
-      (click)="removeById(historyItem.historyId)"
-    ></ion-icon>
-  </ion-item>
+  @for (day of days(); track day.day) {
+  <h3 class="section-title day-title">{{ day.date | date : 'EEEE d MMMM yyyy' }}</h3>
+  <ion-list class="gillou-list history-list" lines="inset">
+    @for (historyItem of day.entries; track historyItem.historyId) {
+    <ion-item>
+      <span class="number-chip" slot="start">{{ historyItem.scoreNumber }}</span>
+      <ion-label>
+        <h2>{{ historyItem.scoreTitle }}</h2>
+        <p>{{ historyItem.date | date : "HH:mm:ss" }}</p>
+      </ion-label>
+      @if (!readonly()) {
+      <ion-button
+        class="tonal-button"
+        shape="round"
+        slot="end"
+        (click)="removeById(historyItem.historyId)"
+        aria-label="Supprimer cette annonce"
+      >
+        <ion-icon slot="icon-only" src="assets/icon/delete.svg"></ion-icon>
+      </ion-button>
+      }
+    </ion-item>
+    }
+  </ion-list>
   }
-</ion-list>
+  <div class="history-bottom-space"></div>
 } @else {
 <div class="empty-history-container">
-  <ion-icon
-    src="assets/icon/orange.svg"
-    color="primary"
-    size="large"
-  ></ion-icon>
+  <div class="empty-history-icon">
+    <ion-icon src="assets/icon/orange.svg" aria-hidden="true"></ion-icon>
+  </div>
   <h2 class="text-bold">Pas encore d'historique</h2>
   <p class="text-small">Il serait peut-être temps d'annoncer.</p>
 </div>

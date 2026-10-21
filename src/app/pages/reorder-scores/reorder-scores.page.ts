@@ -7,11 +7,13 @@ import {
   IonMenuButton,
   IonTitle,
   IonContent,
+  IonList,
   IonReorderGroup,
   IonItem,
   IonReorder,
   IonButton,
   IonIcon,
+  IonLabel,
   ItemReorderEventDetail,
 } from '@ionic/angular';
 import { getScoreById } from 'src/app/data/identifiers/score-identifiers';
@@ -23,6 +25,7 @@ import { getScoreById } from 'src/app/data/identifiers/score-identifiers';
   standalone: true,
   imports: [
     IonIcon,
+    IonLabel,
     IonButton,
     IonReorder,
     IonItem,
@@ -33,6 +36,7 @@ import { getScoreById } from 'src/app/data/identifiers/score-identifiers';
     IonMenuButton,
     IonTitle,
     IonContent,
+    IonList,
   ],
 })
 export class ReorderScoresPage {

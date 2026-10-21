@@ -21,7 +21,7 @@ describe('SCORE_REGISTRY', () => {
         expect(score.id).toBe(entry.id);
         expect(score.measures.length).toBeGreaterThan(0);
         for (const width of [360, 412, 800]) {
-          const svg = renderScore(score, width, false);
+          const svg = renderScore(score, width);
           expect(svg).toContain('<svg');
         }
       });

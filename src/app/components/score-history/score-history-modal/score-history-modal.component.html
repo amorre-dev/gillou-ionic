@@ -1,20 +1,21 @@
-<ion-header>
+<ion-header class="ion-no-border">
   <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-button (click)="cancel()"
-        ><ion-icon src="assets/icon/arrow_back.svg"></ion-icon
-      ></ion-button>
-    </ion-buttons>
     <ion-title>Historique</ion-title>
-    @if(!isHistoryEmpty()) {
     <ion-buttons slot="end">
-      <ion-button (click)="deleteHistory()">
-        <ion-icon src="assets/icon/delete.svg" size="large"></ion-icon>
+      @if (!isHistoryEmpty()) {
+      <ion-button (click)="saveAsCarnival()" aria-label="Enregistrer comme carnaval">
+        <ion-icon slot="icon-only" src="assets/icon/save.svg"></ion-icon>
+      </ion-button>
+      <ion-button (click)="deleteHistory()" aria-label="Tout effacer">
+        <ion-icon slot="icon-only" src="assets/icon/delete.svg"></ion-icon>
+      </ion-button>
+      }
+      <ion-button (click)="cancel()" aria-label="Fermer">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
       </ion-button>
     </ion-buttons>
-    }
   </ion-toolbar>
 </ion-header>
-<ion-content class="ion-padding">
+<ion-content>
   <app-score-history-display></app-score-history-display>
 </ion-content>

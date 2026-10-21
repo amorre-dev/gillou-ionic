@@ -3,27 +3,30 @@
     <ion-menu contentId="main-content">
       <ion-content>
         <div class="menu-header">
-          <ion-img src="assets/icon/gillou.png" class="menu-image"></ion-img>
+          <div class="menu-logo">
+            <ion-img src="assets/icon/gillou.png" alt=""></ion-img>
+          </div>
+          <h1 class="menu-title">Gillou</h1>
+          <p class="menu-subtitle">Annonces du carnaval</p>
         </div>
-        <ion-list id="menu-list">
+        <ion-list id="menu-list" lines="none">
           @for (p of appPages; track p.url) {
           <ion-menu-toggle auto-hide="false">
             <ion-item
               routerDirection="root"
               [routerLink]="[p.url]"
-              lines="none"
               detail="false"
               routerLinkActive="selected"
             >
-              <ion-icon [src]="p.icon" style="margin-right: 10px"></ion-icon>
+              <ion-icon [src]="p.icon" aria-hidden="true"></ion-icon>
               <ion-label>{{ p.title }}</ion-label>
             </ion-item>
           </ion-menu-toggle>
           }
         </ion-list>
       </ion-content>
-      <ion-footer class="menu-footer">
-        <div class="footer-text">Gillou - AM-e.dev</div>
+      <ion-footer class="menu-footer ion-no-border">
+        <div class="footer-text">Gillou · am-e.dev</div>
       </ion-footer>
     </ion-menu>
     <ion-router-outlet id="main-content"></ion-router-outlet>

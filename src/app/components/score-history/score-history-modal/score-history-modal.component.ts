@@ -11,6 +11,9 @@ import {
 } from '@ionic/angular';
 import { ScoreHistoryDisplayComponent } from '../score-history-display.component';
 import { ScoreHistoryService } from 'src/app/services/score-history.service';
+import { HistoryActionsService } from 'src/app/services/history-actions.service';
+import { addIcons } from 'ionicons';
+import { close } from 'ionicons/icons';
 
 @Component({
   selector: 'app-score-history-modal',
@@ -30,14 +33,23 @@ import { ScoreHistoryService } from 'src/app/services/score-history.service';
 export class ScoreHistoryModalComponent {
   private readonly modalCtrl = inject(ModalController);
   private readonly scoreHistoryService = inject(ScoreHistoryService);
+  private readonly actions = inject(HistoryActionsService);
 
   readonly isHistoryEmpty = this.scoreHistoryService.isHistoryEmpty;
+
+  constructor() {
+    addIcons({ close });
+  }
 
   cancel() {
     return this.modalCtrl.dismiss(null, 'cancel');
   }
 
+  saveAsCarnival() {
+    return this.actions.saveCurrentHistory();
+  }
+
   deleteHistory() {
-    this.scoreHistoryService.deleteHistory();
+    return this.actions.confirmClearHistory();
   }
 }

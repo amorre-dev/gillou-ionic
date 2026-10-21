@@ -1,0 +1,20 @@
+<ion-segment
+  mode="ios"
+  [value]="tone()"
+  (ionChange)="onChange($event)"
+  [class.compact]="compact()"
+  aria-label="Tonalité"
+>
+  <ion-segment-button mode="ios" value="sib" layout="icon-start" aria-label="Si bémol (trompette)">
+    <ion-icon src="assets/icon/trumpet.svg" aria-hidden="true"></ion-icon>
+    @if (!compact()) {
+    <ion-label>Si♭</ion-label>
+    }
+  </ion-segment-button>
+  <ion-segment-button mode="ios" value="mib" layout="icon-start" aria-label="Mi bémol (clarinette)">
+    <ion-icon src="assets/icon/clarinet.svg" aria-hidden="true"></ion-icon>
+    @if (!compact()) {
+    <ion-label>Mi♭</ion-label>
+    }
+  </ion-segment-button>
+</ion-segment>

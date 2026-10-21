@@ -8,6 +8,7 @@ const DginsDeLestene = (tone: 'sib' | 'mib'): Score => {
 
   return {
     ...DGINS_DE_LESTENE_ID,
+    tone,
     timeSignature: '6/8',
     ...sheetData,
   };

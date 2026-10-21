@@ -1,22 +1,70 @@
+:host {
+  display: block;
+}
+
+.day-title {
+  margin-top: 18px;
+  text-transform: none;
+  letter-spacing: 0.04em;
+}
+
+.day-title::first-letter {
+  text-transform: uppercase;
+}
+
+.history-list {
+  margin-bottom: 4px;
+}
+
+.history-bottom-space {
+  height: 28px;
+}
+
+.history-list ion-item h2 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--gillou-ink);
+}
+
+.history-list ion-item .number-chip {
+  margin-inline-end: 14px;
+}
+
 .empty-history-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100%; // Ensures it's centered in the page
-    text-align: center;
-    color: var(--ion-text-color);
-  }
-  
-  
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  padding: 24px;
+  text-align: center;
+  color: var(--gillou-ink);
+}
+
+.empty-history-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 96px;
+  height: 96px;
+  margin-bottom: 18px;
+  border-radius: 32px;
+  background: var(--gillou-tonal);
+}
+
+.empty-history-icon ion-icon {
+  font-size: 48px;
+  color: var(--gillou-brand);
+}
+
 .text-bold {
-    font-weight: bold;
-    margin-bottom: 8px;
-    font-size: 1.2rem; // Adjust font size
+  margin: 0 0 6px;
+  font-size: 1.2rem;
+  font-weight: 800;
 }
 
 .text-small {
-    font-size: 0.9rem; // Adjust font size
-    color: var(--ion-text-color-step-600); // Subtle text color
+  margin: 0;
+  font-size: 0.92rem;
+  color: var(--gillou-ink-muted);
 }
-  

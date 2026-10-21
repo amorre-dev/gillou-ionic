@@ -28,9 +28,11 @@ describe('ScoreHistoryDisplayComponent', () => {
     fixture.detectChanges();
     fixture.detectChanges();
 
-    const titles = Array.from(
-      fixture.nativeElement.querySelectorAll('h2') as NodeListOf<HTMLElement>
-    ).map((h) => h.textContent?.trim());
-    expect(titles).toEqual(['12 - La classe', '19 - El doudou']);
+    const text = (selector: string) =>
+      Array.from(
+        fixture.nativeElement.querySelectorAll(selector) as NodeListOf<HTMLElement>
+      ).map((el) => el.textContent?.trim());
+    expect(text('h2')).toEqual(['La classe', 'El doudou']);
+    expect(text('.number-chip')).toEqual(['12', '19']);
   });
 });

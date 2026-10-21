@@ -8,6 +8,7 @@ const Arlequin = (tone: 'sib' | 'mib'): Score => {
 
   return {
     ...ARLEQUIN_ID,
+    tone,
     timeSignature: '6/8',
     ...sheetData,
   };

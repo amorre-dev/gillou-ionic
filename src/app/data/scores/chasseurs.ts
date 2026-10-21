@@ -8,6 +8,7 @@ const Chasseurs = (tone: 'sib' | 'mib'): Score => {
 
   return {
     ...CHASSEURS_ID,
+    tone,
     timeSignature: '2/4',
     ...sheetData,
   };
