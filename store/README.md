@@ -1,7 +1,7 @@
 # Gillou — store release kit (v2.0.0, October 2026)
 
 Everything needed to publish `be.am.e.dev.gillou` on Google Play and the App Store.
-Tracked here: texts, icons, feature graphic, privacy policy. Untracked (large binaries): `playstore/2026-10/`.
+Tracked here: texts, icons, feature graphic, privacy policy, the screenshots of `playstore/2026-10/`. Untracked (release binaries, ignored by git): the `.apk` and `.aab` bundles.
 
 ## ⚠️ Package change
 The previous build (Feb 2025) used `am.e.dev.gillou`. The new id `be.am.e.dev.gillou` is a **different app** for both stores:
