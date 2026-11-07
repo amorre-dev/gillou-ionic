@@ -1,23 +1,25 @@
 import { CarnivalStats, StatsBlock } from './carnival-stats.helper';
+import { LIGHT_THEME } from './theme-colors';
 
 /**
  * Draws "Mon carnaval en chiffres" as a 1080×1350 PNG (a portrait social-post format).
- * Colours mirror the light theme tokens; the image is the same in both app themes.
+ * Colours are the light theme tokens (theme-colors.ts mirrors variables.scss): the image is
+ * the same in both app themes, so they are not read from the current DOM palette.
  */
 const W = 1080;
 /** Minimum height (4:5 portrait); the card grows when long titles or ties need more room. */
 const MIN_H = 1350;
 const FOOTER_H = 170;
 const C = {
-  bg: '#fff6ee',
-  band: '#e9a262',
-  onBand: '#3b2312',
-  card: '#ffffff',
-  border: '#f0d6bc',
-  ink: '#5a3519',
-  muted: '#8a6545',
-  tonal: '#fae8d8',
-  brand: '#e8892a',
+  bg: LIGHT_THEME.bgMain,
+  band: LIGHT_THEME.accent,
+  onBand: LIGHT_THEME.onAccent,
+  card: LIGHT_THEME.surface,
+  border: LIGHT_THEME.outline,
+  ink: LIGHT_THEME.ink,
+  muted: LIGHT_THEME.inkMuted,
+  tonal: LIGHT_THEME.tonal,
+  brand: LIGHT_THEME.brand,
 };
 const FONT = 'Nunito, "Segoe UI", Roboto, sans-serif';
 

@@ -68,10 +68,10 @@
 }
 
 .facebook-button {
-  --background: #1877f2;
-  --background-hover: #1569d6;
-  --background-activated: #1569d6;
-  --color: #ffffff;
+  --background: var(--gillou-facebook);
+  --background-hover: var(--gillou-facebook-pressed);
+  --background-activated: var(--gillou-facebook-pressed);
+  --color: var(--gillou-on-facebook);
   margin-top: 10px;
   height: 46px;
 }

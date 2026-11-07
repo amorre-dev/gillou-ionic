@@ -25,6 +25,7 @@ import { BrandFooterComponent } from './components/brand-footer/brand-footer.com
 
 const ASSET_FOLDER = 'assets/icon/';
 /** Keep in sync with --ion-color-primary in src/theme/variables.scss */
+/** Native status bar colour: mirrors --gillou-accent (--ion-color-primary) of src/theme/variables.scss. */
 const PRIMARY_COLOR = '#e9a262';
 
 @Component({

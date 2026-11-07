@@ -95,7 +95,7 @@ ion-toolbar ion-icon {
 /* Segmented pill inside the accent toolbar: translucent track, light indicator, dark-brown text */
 ion-toolbar app-tone-segment {
   --gillou-segment-track: color-mix(in srgb, var(--gillou-on-accent) 14%, transparent);
-  --gillou-segment-indicator: #fff6ee;
+  --gillou-segment-indicator: var(--gillou-segment-indicator-on-accent);
   --gillou-segment-text: var(--gillou-on-accent);
   --gillou-segment-text-checked: var(--gillou-on-accent);
   margin-right: 4px;
@@ -240,8 +240,8 @@ ion-textarea .label-text {
 /* Primary (brand) action button */
 ion-button.primary-button {
   --background: var(--gillou-brand);
-  --background-hover: #d07a22;
-  --background-activated: #d07a22;
+  --background-hover: var(--gillou-brand-pressed);
+  --background-activated: var(--gillou-brand-pressed);
   --color: var(--gillou-on-accent);
   --padding-top: 20px;
   --padding-bottom: 20px;

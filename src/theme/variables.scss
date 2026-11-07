@@ -142,6 +142,15 @@
   --gillou-segment-text: #825f41;
   --gillou-segment-text-checked: #5a3519;
 
+  /* Pressed state of the brand orange (= tertiary shade) */
+  --gillou-brand-pressed: #d07a22;
+  /* Segmented pill indicator when the pill sits on the accent toolbar (light in both palettes) */
+  --gillou-segment-indicator-on-accent: #fff6ee;
+  /* Facebook share button: the network's own brand blue, identical in both palettes */
+  --gillou-facebook: #1877f2;
+  --gillou-facebook-pressed: #1569d6;
+  --gillou-on-facebook: #ffffff;
+
   --gillou-radius-lg: 24px;
   --gillou-radius-md: 18px;
   --gillou-radius-sm: 12px;
